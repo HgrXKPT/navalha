@@ -4,6 +4,8 @@ Os tokens ficam em `web/src/styles/tokens.css`, como variáveis CSS no `:root`.
 
 **Regra do projeto:** o CSS dos componentes usa só tokens. Nada de cor em hexadecimal, `px` solto ou fonte digitada à mão. Se faltar um token, ele entra neste arquivo primeiro.
 
+A única exceção é a borda fina de 1px, por exemplo `border-bottom: 1px solid var(--color-border)`.
+
 ## Cores
 
 | Token | Valor | Uso |
