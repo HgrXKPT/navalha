@@ -40,7 +40,7 @@ Primeiro dia no time. Antes de qualquer tela, você publica o repositório no Gi
 8. Faça o commit, mande a branch para o GitHub e abra o PR:
 
    ```powershell
-   git add .
+   git add -A
    git commit -m "feat(site): ajusta título, idioma e ícone da página"
    git push -u origin feature/T-001-head
    gh pr create --fill

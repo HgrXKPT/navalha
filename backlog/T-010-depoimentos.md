@@ -38,7 +38,7 @@ Medidas:
 - [Responsivo › Rolagem horizontal](../guias/responsivo.md#rolagem-horizontal)
 - [HTML semântico › Citações](../guias/html-semantico.md#citações)
 - [Acessibilidade › Teclado e foco](../guias/acessibilidade.md#teclado-e-foco)
-- Oficial: [MDN · scroll-snap-type](https://developer.mozilla.org/pt-BR/docs/Web/CSS/scroll-snap-type)
+- Oficial: [MDN · scroll-snap-type](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-snap-type) (em inglês; o MDN não tem esta página em português)
 
 ## Como conferir
 

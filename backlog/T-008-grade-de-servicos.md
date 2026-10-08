@@ -30,7 +30,7 @@ No celular, um card embaixo do outro funciona bem. No tablet e no desktop, sobra
 
 - [Grid › Colunas automáticas](../guias/grid.md#colunas-automáticas)
 - [Grid › Grid ou flexbox](../guias/grid.md#grid-ou-flexbox)
-- Oficial: [MDN · minmax()](https://developer.mozilla.org/pt-BR/docs/Web/CSS/minmax)
+- Oficial: [MDN · minmax()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/minmax) (em inglês; o MDN não tem esta página em português)
 
 ## Como conferir
 
