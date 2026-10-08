@@ -21,6 +21,7 @@ A primeira dobra precisa vender: um título grande, uma frase curta e um botão 
 - [ ] **Dado** o link, **então** ele tem cara de botão: `inline-block`, `padding: var(--space-3) var(--space-5)`, fundo `--color-primary`, texto `--color-on-primary`, `--radius-sm`, peso 600, caixa-alta e sem sublinhado.
 - [ ] **Dado** o mouse em cima, **então** o fundo do botão muda para `--color-primary-strong`.
 - [ ] **Dado** a navegação pelo teclado, **então** o botão mostra `outline: 3px solid var(--color-focus)` com `outline-offset: 3px`.
+- [ ] O hero passa no axe.
 
 ## Layout
 

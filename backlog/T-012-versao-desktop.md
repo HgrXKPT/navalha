@@ -23,6 +23,7 @@ Até aqui, tudo foi feito para o celular, de propósito: é o mobile-first. Agor
   - [ ] o endereço e a tabela ficam lado a lado, em duas colunas com `gap: var(--space-7)`;
   - [ ] o hero ganha `padding-block` igual a duas vezes `--space-8`, o título passa a usar `--text-3xl`, e o texto fica com largura máxima de metade do container.
 - [ ] **Dado** 375px e 1280px, **então** a página nunca rola na horizontal, e tudo o que já existia no celular continua igual.
+- [ ] A página inteira passa no axe no desktop.
 
 ## Layout
 

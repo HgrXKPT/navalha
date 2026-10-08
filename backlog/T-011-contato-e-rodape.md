@@ -25,6 +25,7 @@ Para fechar a página, faltam três informações: como chegar, como falar com a
 - [ ] **Dado** o rodapé, **então** ele mantém o © e ganha o link **Voltar ao topo**, para `#inicio`.
 - [ ] **Dado** que rolo a página, **então** o cabeçalho fica grudado no topo (`position: sticky`), com fundo opaco e por cima do conteúdo (`z-index: 10`).
 - [ ] **Dado** que clico num link do menu, **então** o título da seção não fica escondido atrás do cabeçalho: as seções com `id` têm `scroll-margin-top: var(--scroll-offset)`.
+- [ ] O contato e o rodapé passam no axe.
 
 ## Layout
 

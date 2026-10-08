@@ -24,6 +24,7 @@ A lista de serviços é o que o cliente mais consulta. Cada serviço vira um car
   - ele tem fundo `--color-surface`, borda de 1px `--color-border`, `--radius-md` e `padding: var(--space-5)`;
   - a descrição usa `--color-text-muted`;
   - o preço usa `--color-primary`.
+- [ ] A seção de serviços passa no axe.
 
 ## Layout
 

@@ -12,7 +12,7 @@ O site precisa de um endereço público desde o primeiro dia, porque é o link d
 
 ## Passo a passo
 
-1. Rode `git switch main` e `git pull`, e crie a branch `feature/T-002-deploy`.
+1. Rode `git switch main` e `git pull`, e crie a branch `feature/T-002-deploy-vercel` (ou use o `/proximo`).
 2. Gere o build de produção e veja o resultado:
 
    ```powershell

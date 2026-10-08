@@ -20,7 +20,7 @@ A página já tem estrutura, mas está com a cara padrão do navegador: fundo br
   - o `h2` tem `--space-5` de margem embaixo.
 - [ ] **Dado** um link no meio de um texto, **então** ele usa `--color-primary` e continua sublinhado.
 - [ ] **Dado** as seções, **então** toda `section` tem `padding` de `--space-7` em cima e embaixo e de `--space-4` dos lados.
-- [ ] Não há nenhum valor solto, só tokens. A única exceção do projeto é a borda fina de 1px.
+- [ ] Cores, espaços, fontes e tamanhos de texto vêm todos dos tokens: nenhum hexadecimal e nenhum `px` solto. A borda fina de 1px é a exceção.
 - [ ] A página passa no axe na regra de contraste.
 
 ## Layout

@@ -33,7 +33,7 @@ Primeiro dia no time. Antes de qualquer tela, você publica o repositório no Gi
    ```
 
    Abra http://localhost:5173. Por enquanto, a página tem uma linha de texto só.
-4. Crie a branch do ticket com `git switch -c feature/T-001-head` (ou com o `/proximo`).
+4. Crie a branch do ticket com `git switch -c feature/T-001-github-e-primeiro-pr` (ou com o `/proximo`, que cria a mesma).
 5. Faça a mudança descrita nos critérios.
 6. Confira o trabalho: `npm run format`, depois `npm run check` e `npm run e2e -- T-001`.
 7. Peça o review com `/revisar`.
@@ -42,7 +42,7 @@ Primeiro dia no time. Antes de qualquer tela, você publica o repositório no Gi
    ```powershell
    git add -A
    git commit -m "feat(site): ajusta título, idioma e ícone da página"
-   git push -u origin feature/T-001-head
+   git push -u origin HEAD
    gh pr create --fill
    ```
 

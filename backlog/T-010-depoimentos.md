@@ -17,6 +17,7 @@ Depoimentos convencem, mas cinco deles empilhados no celular viram um muro de te
 - [ ] **Dado** 375px, **então** a lista rola na horizontal (`overflow-x: auto`), encaixa em cada depoimento (`scroll-snap`), e cada item ocupa 85% da largura.
 - [ ] **Dado** a página inteira, **então** ela continua sem rolagem horizontal. Só a faixa rola.
 - [ ] **Dado** o teclado, **então** a faixa recebe foco para rolar com as setas: a `ul` tem `tabIndex={0}` e `aria-label="Lista de depoimentos"`.
+- [ ] A seção de depoimentos passa no axe.
 
 ## Layout
 

@@ -21,6 +21,7 @@ O PO testou no celular: com o cabeçalho fixo, as duas linhas dele tomam espaço
   - o texto do botão é sempre **Menu**.
 - [ ] **Dado** o menu fechado, **então** o `nav` fica com `display: none`. É por isso que o Tab pula os links.
 - [ ] **Dado** 640px ou mais, **então** o botão some, e os links aparecem como no T-012.
+- [ ] **Dado** o menu aberto, **então** o cabeçalho passa no axe.
 
 ## Layout
 

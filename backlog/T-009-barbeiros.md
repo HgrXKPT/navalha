@@ -18,8 +18,9 @@ Cliente de barbearia escolhe pelo barbeiro. Cada um aparece com foto redonda, no
   - o nome num `h3`;
   - a lista de especialidades, com `aria-label="Especialidades"`.
 - [ ] **Dado** 375px, **então** os cards ficam em 2 colunas, e todas as fotos são círculos perfeitos e do mesmo tamanho, sem achatar nenhuma, nem a do Caio.
-- [ ] **Dado** as especialidades, **então** elas ficam lado a lado e centralizadas, com `gap: var(--space-2)`, e passam para a linha de baixo se não couberem.
+- [ ] **Dado** as especialidades, **então** elas ficam lado a lado e centralizadas, numa lista flex com `flex-wrap: wrap` e `gap: var(--space-2)`, e passam para a linha de baixo se não couberem.
 - [ ] **Dado** cada especialidade, **então** ela é uma etiqueta com `padding: var(--space-1) var(--space-2)`, `--radius-full`, fundo `--color-surface-raised` e `--text-sm`.
+- [ ] A seção de barbeiros passa no axe.
 
 ## Layout
 
