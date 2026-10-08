@@ -20,5 +20,9 @@ test("o ícone da aba é o da Navalha", async ({ page }) => {
   );
   const response = await page.request.get("/favicon.svg");
   expect(response.ok()).toBe(true);
-  expect(await response.text()).toContain("Barbearia Navalha");
+  const isNavalha = (await response.text()).includes("Barbearia Navalha");
+  expect(
+    isNavalha,
+    "o /favicon.svg ainda não é o da Navalha: copie design/favicon.svg por cima de web/public/favicon.svg",
+  ).toBe(true);
 });
