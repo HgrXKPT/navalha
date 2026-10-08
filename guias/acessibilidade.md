@@ -99,6 +99,7 @@ Quem usa teclado passa por todos os links do cabeçalho antes de chegar ao conte
 **Armadilhas**
 
 - Não esconda o link com `display: none` nem com `visibility: hidden`: elemento assim não recebe foco, e o link nunca apareceria.
+- Se o link tiver `top` maior que zero (um respiro do topo da tela), o `translateY(-100%)` não basta: sobra uma faixa dele à mostra. Desloque mais, como `translateY(-200%)`.
 - Com o foco no `main`, o navegador pode desenhar o contorno em volta da região inteira. Como o `main` não é interativo, ele é a exceção à regra do contorno e pode ficar sem.
 - Para testar: recarregue, aperte Tab (o link aparece), Enter (a URL ganha o `#id`) e Tab de novo. O foco precisa cair no primeiro elemento focável do conteúdo.
 
