@@ -5,13 +5,13 @@ export const barbers: Barber[] = [
     id: "rafael",
     name: "Rafael Lima",
     photoUrl: "/barbers/rafael.svg",
-    specialties: ["Degradê", "Navalhado"],
+    specialties: ["Degradê", "Navalha"],
   },
   {
     id: "bruno",
     name: "Bruno Costa",
     photoUrl: "/barbers/bruno.svg",
-    specialties: ["Barba", "Pigmentação"],
+    specialties: ["Barba", "Bigode"],
   },
   {
     id: "caio",
