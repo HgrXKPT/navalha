@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
   <title>Caio Mendes</title>
-  <!-- Proporção 3:4 de propósito: sem object-fit, a foto sai achatada no card quadrado. -->
   <rect width="300" height="400" fill="#33402f" />
   <path d="M30 400 C30 290 92 258 150 258 C208 258 270 290 270 400 Z" fill="#d6c2a2" />
   <rect x="127" y="214" width="46" height="52" fill="#d6c2a2" />
