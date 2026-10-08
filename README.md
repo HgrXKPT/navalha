@@ -4,7 +4,7 @@ Agendamento online para barbearia. O cliente escolhe o serviço, o barbeiro e o 
 
 **Demo:** o link entra no T-002.
 
-> Projeto de portfólio construído por tickets, como num time de produto: cada funcionalidade nasce num ticket do [backlog](backlog/BOARD.md), passa por review e por CI e é publicada a cada merge.
+> Projeto de portfólio construído por tickets, como num time de produto: cada funcionalidade nasce num ticket do [backlog](backlog/BOARD.md), passa por review e por CI e é publicada a cada merge. Os [guias](guias/) são a consulta rápida durante os tickets.
 
 ## Status
 
@@ -43,7 +43,7 @@ Rode dentro de `web/`:
 |---|---|
 | `npm run dev` | sobe o site em modo de desenvolvimento |
 | `npm run build` | confere os tipos e gera o build em `dist/` |
-| `npm run check` | tipos, lint, formatação e testes de unidade (o mesmo que o CI roda) |
+| `npm run check` | tipos, lint, formatação e testes de unidade (o CI roda o `check` e o `build`) |
 | `npm run format` | formata o código com o Prettier |
 | `npm run e2e -- T-0xx` | roda o teste de aceite de um ticket |
 | `npm run shots` | tira screenshots em 375, 768 e 1280px para o review |
@@ -56,5 +56,5 @@ design/     tokens e telas de referência
 backlog/    BOARD.md e um arquivo por ticket
 guias/      guias rápidos de consulta
 desafios/   um desafio técnico por marco
-docs/       spec e planos
+docs/       a spec do projeto
 ```

@@ -217,7 +217,7 @@ D:\Projetct\navalha\
 ├── backlog/              BOARD.md e um arquivo por ticket
 ├── guias/                guias rápidos
 ├── desafios/             um projeto inicial por marco
-├── docs/                 spec e planos
+├── docs/                 a spec (os planos de onda ficam fora do repositório)
 ├── .github/workflows/    CI do PR
 ├── .claude/skills/       /proximo e /revisar (Claude Code)
 ├── .agents/skills/       /proximo e /revisar (Antigravity)
@@ -280,7 +280,7 @@ O `AGENTS.md` do projeto libera a IA para atualizar o `BOARD.md` sem mostrar o d
   - as skills `proximo` e `revisar`, em `.claude/skills/` e em `.agents/skills/`;
   - `README.md`;
   - `.gitignore`.
-- **`docs/`:** uma cópia desta spec e o plano da onda 1.
+- **`docs/`:** uma cópia desta spec. O plano da onda fica fora do repositório, em `D:\Projetct\docs\agentes\`, porque descreve a solução de referência.
 
 ## 10. Onda do marco 3: o esqueleto da API
 
