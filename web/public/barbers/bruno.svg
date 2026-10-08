@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <title>Bruno Costa</title>
+  <rect width="300" height="300" fill="#2b3340" />
+  <path d="M40 300 C40 214 96 190 150 190 C204 190 260 214 260 300 Z" fill="#c4a98a" />
+  <rect x="128" y="160" width="44" height="40" fill="#c4a98a" />
+  <circle cx="150" cy="122" r="56" fill="#c4a98a" />
+  <path d="M96 128 C100 176 124 196 150 196 C176 196 200 176 204 128 C192 150 176 160 150 160 C124 160 108 150 96 128 Z" fill="#1d1712" />
+  <path d="M98 104 C100 72 124 62 150 62 C178 62 200 74 202 104 C190 92 172 86 150 86 C128 86 110 92 98 104 Z" fill="#1d1712" />
+</svg>

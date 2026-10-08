@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232 48" width="232" height="48" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Barbearia Navalha</title>
+  <!-- Navalha: lâmina, pino e cabo -->
+  <g fill="#c9a45c">
+    <path d="M7 31 L31 9 C35 5.5 41 8 39.5 13 L17 36 Z" />
+    <circle cx="15" cy="35" r="3.5" fill="#111111" stroke="#c9a45c" stroke-width="2.5" />
+  </g>
+  <path d="M13.5 37 L6 45" stroke="#c9a45c" stroke-width="5" stroke-linecap="round" fill="none" />
+  <!-- NAVALHA, só com traços retos -->
+  <g fill="none" stroke="#f4efe6" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M56 38 V10 L74 38 V10" />
+    <path d="M81 38 L90 10 L99 38 M85 28 H95" />
+    <path d="M106 10 L115 38 L124 10" />
+    <path d="M131 38 L140 10 L149 38 M135 28 H145" />
+    <path d="M156 10 V38 H172" />
+    <path d="M179 10 V38 M197 10 V38 M179 24 H197" />
+    <path d="M204 38 L213 10 L222 38 M208 28 H218" />
+  </g>
+</svg>

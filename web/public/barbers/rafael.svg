@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <title>Rafael Lima</title>
+  <rect width="300" height="300" fill="#3a3128" />
+  <path d="M40 300 C40 214 96 190 150 190 C204 190 260 214 260 300 Z" fill="#cdb99a" />
+  <rect x="128" y="160" width="44" height="40" fill="#cdb99a" />
+  <circle cx="150" cy="122" r="56" fill="#cdb99a" />
+  <path d="M94 116 C94 70 122 56 152 56 C186 56 208 76 206 112 C196 96 176 88 150 88 C124 88 104 98 94 116 Z" fill="#2a211a" />
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <title>Caio Mendes</title>
+  <!-- Proporção 3:4 de propósito: sem object-fit, a foto sai achatada no card quadrado. -->
+  <rect width="300" height="400" fill="#33402f" />
+  <path d="M30 400 C30 290 92 258 150 258 C208 258 270 290 270 400 Z" fill="#d6c2a2" />
+  <rect x="127" y="214" width="46" height="52" fill="#d6c2a2" />
+  <circle cx="150" cy="170" r="60" fill="#d6c2a2" />
+  <path d="M88 168 C82 112 112 92 150 92 C190 92 220 114 212 170 C206 140 186 124 150 124 C116 124 94 140 88 168 Z" fill="#4a3424" />
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <title>Diego Rocha</title>
+  <rect width="300" height="300" fill="#40302f" />
+  <path d="M40 300 C40 214 96 190 150 190 C204 190 260 214 260 300 Z" fill="#a8825f" />
+  <rect x="128" y="160" width="44" height="40" fill="#a8825f" />
+  <circle cx="150" cy="122" r="56" fill="#a8825f" />
+  <path d="M104 150 C112 182 130 192 150 192 C170 192 188 182 196 150 C184 164 168 170 150 170 C132 170 116 164 104 150 Z" fill="#231915" />
+  <path d="M96 112 C96 74 120 60 150 60 C182 60 204 76 204 112 L196 100 L186 108 L176 96 L164 106 L150 94 L136 106 L124 96 L114 108 L104 100 Z" fill="#231915" />
+</svg>
