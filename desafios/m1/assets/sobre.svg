@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <title>Grãos de café espalhados sobre a mesa</title>
+  <rect width="600" height="400" rx="24" fill="#6f3a1f" />
+  <g fill="#8a4b2a">
+    <ellipse cx="120" cy="110" rx="34" ry="48" transform="rotate(25 120 110)" />
+    <ellipse cx="260" cy="80" rx="34" ry="48" transform="rotate(-20 260 80)" />
+    <ellipse cx="410" cy="130" rx="34" ry="48" transform="rotate(40 410 130)" />
+    <ellipse cx="520" cy="260" rx="34" ry="48" transform="rotate(-35 520 260)" />
+    <ellipse cx="190" cy="270" rx="34" ry="48" transform="rotate(60 190 270)" />
+    <ellipse cx="340" cy="300" rx="34" ry="48" transform="rotate(10 340 300)" />
+    <ellipse cx="70" cy="320" rx="34" ry="48" transform="rotate(-50 70 320)" />
+  </g>
+  <g fill="none" stroke="#5a2d16" stroke-width="6" stroke-linecap="round">
+    <path d="M100 75 C130 105 112 125 142 150" />
+    <path d="M272 36 C246 70 280 92 250 124" />
+    <path d="M385 98 C420 118 398 140 434 162" />
+    <path d="M540 220 C508 250 538 272 500 300" />
+    <path d="M150 262 C190 250 196 286 232 278" />
+    <path d="M335 254 C350 290 328 310 345 346" />
+    <path d="M40 300 C80 300 62 336 100 340" />
+  </g>
+</svg>

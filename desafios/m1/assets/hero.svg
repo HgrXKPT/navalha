@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450">
+  <title>Xícara de café sobre o pires</title>
+  <defs>
+    <clipPath id="moldura">
+      <rect width="600" height="450" rx="24" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#moldura)">
+    <rect width="600" height="450" fill="#efe4d6" />
+    <circle cx="470" cy="90" r="120" fill="#e6d5c1" />
+  </g>
+  <!-- vapor -->
+  <g fill="none" stroke="#c9b29a" stroke-width="10" stroke-linecap="round">
+    <path d="M250 120 C230 95 270 80 250 52" />
+    <path d="M300 112 C280 87 320 72 300 44" />
+    <path d="M350 120 C330 95 370 80 350 52" />
+  </g>
+  <!-- pires -->
+  <ellipse cx="300" cy="350" rx="190" ry="34" fill="#d8c4ad" />
+  <ellipse cx="300" cy="342" rx="150" ry="22" fill="#cbb398" />
+  <!-- xícara -->
+  <path d="M170 160 H430 L410 300 C405 330 380 344 350 344 H250 C220 344 195 330 190 300 Z" fill="#ffffff" />
+  <path d="M430 190 C490 190 492 270 420 272" fill="none" stroke="#ffffff" stroke-width="22" />
+  <ellipse cx="300" cy="162" rx="130" ry="22" fill="#6f3a1f" />
+  <ellipse cx="300" cy="158" rx="104" ry="14" fill="#8a4b2a" />
+</svg>
