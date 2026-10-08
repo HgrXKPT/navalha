@@ -5,7 +5,7 @@ Uma cafeteria do bairro pediu a landing page dela. Você tem o layout e os texto
 ## Regras
 
 - **Tempo: 1h30, cronometrada.** Quando o tempo acabar, pare e entregue o que tiver.
-- **Sem IA.** Pode consultar o MDN e o código que você mesmo escreveu no Navalha.
+- **Sem IA.** Pode consultar o MDN, os guias do marco 1 (`guias/`) e o código que você mesmo escreveu no Navalha.
 - **Só HTML e CSS.** Não tem React nem build: o projeto é um `index.html` e um `styles.css`.
 
 ## O que já vem pronto
