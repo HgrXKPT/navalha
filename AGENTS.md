@@ -26,7 +26,7 @@ Estas regras valem para o Claude Code, que as carrega pelo `CLAUDE.md`, e para o
 | `backlog/` | o `BOARD.md` e os tickets | a IA |
 | `guias/` | os guias rápidos | a IA |
 | `desafios/` | um desafio por marco | a IA cria o projeto inicial, e o Higor resolve |
-| `docs/` | spec e planos | a IA |
+| `docs/` | a spec (os planos de onda ficam fora do repositório) | a IA |
 
 ## Como a IA ajuda
 
@@ -47,9 +47,11 @@ Estas regras valem para o Claude Code, que as carrega pelo `CLAUDE.md`, e para o
 - **Nunca sugira** `create-react-app`, class components, `ReactDOM.render` nem `any` para calar erro. Quando o Error Boundary chegar, ele é feito com a lib `react-error-boundary`.
 - `useEffect` serve para sincronizar com um sistema externo. Ele não serve para derivar estado nem para reagir a evento.
 - **CSS:**
-  - só os tokens de `web/src/styles/tokens.css`, com uma única exceção: a borda fina de 1px;
+  - cores, espaços, fontes, tamanhos de texto e raios vêm dos tokens de `web/src/styles/tokens.css`;
+  - valores estruturais que o próprio ticket define (como `20rem`, `85%`, `z-index: 10` ou uma conta com tokens) e a borda fina de 1px são permitidos;
   - breakpoints de 640px e 1024px;
   - mobile-first.
+- **Testes:** até o marco 2, os testes do projeto são só os de aceite do QA. Os testes unitários do Higor começam no marco 3. Antes disso, não escreva teste unitário num ticket, mesmo que uma regra global peça.
 
 ## Convenções do código
 
@@ -68,24 +70,30 @@ Estas regras valem para o Claude Code, que as carrega pelo `CLAUDE.md`, e para o
 
 ## Protocolo do /proximo
 
-1. Leia o `backlog/BOARD.md`.
-2. Se a branch `main` não existe, mostre o T-001, que é o ticket que cria a `main`, e pare.
-3. Se o marco atual está todo ✅, avise o Higor e proponha a próxima onda (veja "Preparação de onda").
-4. Pegue o primeiro ticket ⬜ cujo "Depende de" já está ✅.
-5. Se o repositório tem remoto, rode `git switch main` e `git pull --ff-only`.
-6. Crie a branch `feature/T-0xx-slug`, ou `fix/T-0xx-slug` se o ticket for de bug. O slug é o mesmo do nome do arquivo do ticket.
-7. Marque o ticket como 🟦 no `BOARD.md`. A marcação entra no commit do ticket.
-8. Mostre o título, o conceito novo, um resumo dos critérios de aceite, o layout e os links do guia rápido. Não resolva o ticket.
+1. Se a branch atual é de ticket (`feature/T-…` ou `fix/T-…`), ou se o `BOARD.md` tem um ticket 🟦: retome esse ticket, mostrando o resumo dele (passo 9), e pare. Não crie outra branch.
+2. Se a árvore tem mudanças não commitadas, avise o Higor e pare.
+3. Se a branch `main` não existe, mostre o T-001, que é o ticket que cria a `main`, e pare.
+4. Se o repositório tem remoto, rode `git switch main` e `git pull --ff-only`. Se `git branch --no-merged main` listar alguma branch de ticket, peça para o Higor terminar o PR dela antes, e pare.
+5. Leia o `BOARD.md` da `main`. Se não sobrou nenhum ticket ⬜, avise e proponha a próxima onda (veja "Preparação de onda").
+6. Pegue o primeiro ticket ⬜ cujo "Depende de" já está ✅.
+7. Crie a branch `feature/T-0xx-slug`, ou `fix/T-0xx-slug` se o ticket for de bug. O slug é o mesmo do nome do arquivo do ticket, por exemplo `feature/T-003-esqueleto-semantico`.
+8. Marque o ticket como 🟦 no `BOARD.md`. A marcação entra no commit do ticket.
+9. Mostre o título, o conceito novo, um resumo dos critérios de aceite, o layout e os links do guia rápido. Não resolva o ticket.
 
 ## Protocolo do /revisar
 
 1. Descubra o ticket pelo nome da branch (`T-0xx`) e leia o arquivo dele em `backlog/`.
 2. Rode os checks dentro de `web/`:
    - `npm run check`;
-   - `npm run e2e -- T-0xx`, para o ticket;
-   - para regressão, `npm run e2e -- T-a T-b …` com os tickets ✅ do mesmo marco;
+   - `npm run e2e -- T-0xx`, mas **só se** existir `web/e2e/aceite/T-0xx-*.spec.ts` (o T-002 e os desafios não têm teste de aceite);
+   - para regressão, `npm run e2e -- T-a T-b …` com os tickets ✅ do mesmo marco que têm arquivo de aceite;
    - se o ticket mexe em `api/`: `dotnet build` (sem warning novo), `dotnet test` e `dotnet format --verify-no-changes`.
-3. Leia o diff com `git diff main...HEAD`, e também o que ainda não foi commitado.
+
+   Se um caso do e2e falhar, rode só ele de novo uma vez (com `-g "nome do caso"`) antes de pedir ajustes. Falha que some na segunda vez é instabilidade do servidor de testes, não do código.
+3. Leia o que mudou:
+   - `git status --short`, para ver os arquivos novos e os alterados;
+   - `git diff main...HEAD` e `git diff`, para o que já foi commitado e o que ainda não foi;
+   - o conteúdo inteiro de cada arquivo novo (não rastreado), porque o `git diff` não mostra arquivo que o git ainda não conhece.
 4. **Se o ticket é de tela** (tem a seção Layout com PNG): rode `npm run shots`, abra os PNGs de `web/.shots/` e compare com os de `design/`. Olhe a estrutura, o espaçamento pela escala de tokens e a responsividade. Não compare pixel por pixel.
 5. **Se o ticket é o desafio**: no PowerShell, rode `$env:SHOTS_URL="file:///D:/Projetct/navalha/desafios/m1/index.html"; npm run shots` e depois `Remove-Item Env:SHOTS_URL`. Avalie pelos critérios do README do desafio.
 6. Responda neste formato:
@@ -110,4 +118,6 @@ Quando todos os tickets do marco estiverem ✅:
    - confira as versões das bibliotecas;
    - produza os arquivos numa branch `chore/onda-N`: tickets, telas de referência, guias novos, testes de aceite e, a partir do marco 3, a parte da API que é da empresa;
    - faça o commit.
+
+   O plano da onda fica fora do repositório, em `D:\Projetct\docs\agentes\`, porque descreve a solução de referência. Em `docs/` só entra a spec.
 3. Cada teste de aceite novo precisa ficar vermelho antes do seu ticket e verde dali em diante. Prove isso com uma solução de referência feita fora do repositório.
