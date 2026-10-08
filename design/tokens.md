@@ -2,9 +2,11 @@
 
 Os tokens ficam em `web/src/styles/tokens.css`, como variáveis CSS no `:root`.
 
-**Regra do projeto:** o CSS dos componentes usa só tokens. Nada de cor em hexadecimal, `px` solto ou fonte digitada à mão. Se faltar um token, ele entra neste arquivo primeiro.
+**Regra do projeto:** cores, espaços, fontes, tamanhos de texto e raios vêm sempre dos tokens. Nada de cor em hexadecimal, `px` solto ou fonte digitada à mão. Se faltar um token, ele entra neste arquivo primeiro.
 
-A única exceção é a borda fina de 1px, por exemplo `border-bottom: 1px solid var(--color-border)`.
+São permitidos:
+- a borda fina de 1px, por exemplo `border-bottom: 1px solid var(--color-border)`;
+- valores estruturais que o próprio ticket define, como `20rem`, `85%`, `z-index: 10` ou uma conta com tokens (`calc(var(--space-8) * 2)`).
 
 ## Cores
 

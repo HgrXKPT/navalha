@@ -1,6 +1,7 @@
 /*
  * Tokens do design system do Navalha.
- * Use sempre estas variáveis no CSS dos componentes: nenhuma cor ou medida "solta".
+ * Cores, espaços, fontes, tamanhos de texto e raios vêm daqui. Valores estruturais que o
+ * ticket define (como 20rem, 85% ou z-index) e a borda fina de 1px são permitidos.
  * Documentação e contraste de cada par de cores: design/tokens.md.
  */
 :root {
