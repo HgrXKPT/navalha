@@ -8,7 +8,7 @@ Quem atualiza este arquivo é a IA. O `/proximo` marca 🟦 na branch nova. O `/
 
 | Ticket | Título | Tipo | Tam. | Status | Nota do review |
 |---|---|---|---|---|---|
-| [T-001](T-001-github-e-primeiro-pr.md) | Repositório no GitHub e primeiro PR | feature | M | ⬜ | |
+| [T-001](T-001-github-e-primeiro-pr.md) | Repositório no GitHub e primeiro PR | feature | M | 🟦 | |
 | [T-002](T-002-deploy-vercel.md) | Deploy contínuo na Vercel | feature | P | ⬜ | |
 
 ## Marco 1 · Site público
