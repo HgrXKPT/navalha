@@ -8,14 +8,14 @@ Quem atualiza este arquivo é a IA. O `/proximo` marca 🟦 na branch nova. O `/
 
 | Ticket | Título | Tipo | Tam. | Status | Nota do review |
 |---|---|---|---|---|---|
-| [T-001](T-001-github-e-primeiro-pr.md) | Repositório no GitHub e primeiro PR | feature | M | 🟦 | |
-| [T-002](T-002-deploy-vercel.md) | Deploy contínuo na Vercel | feature | P | ⬜ | |
+| [T-001](T-001-github-e-primeiro-pr.md) | Repositório no GitHub e primeiro PR | feature | M | ✅ | 🟡 restaurar asset de design ao copiar; seguir Conventional Commits |
+| [T-002](T-002-deploy-vercel.md) | Deploy contínuo na Vercel | feature | P | ✅ | ⚪ texto do link da demo no README |
 
 ## Marco 1 · Site público
 
 | Ticket | Título | Tipo | Tam. | Status | Nota do review |
 |---|---|---|---|---|---|
-| [T-003](T-003-esqueleto-semantico.md) | Esqueleto semântico da página | feature | M | ⬜ | |
+| [T-003](T-003-esqueleto-semantico.md) | Esqueleto semântico da página | feature | M | ✅ | ⚪ ponto final a mais no texto de copyright |
 | [T-004](T-004-base-visual.md) | Base visual com os tokens | feature | M | ⬜ | |
 | [T-005](T-005-cabecalho.md) | Cabeçalho no celular | feature | M | ⬜ | |
 | [T-006](T-006-hero.md) | Hero com chamada para agendar | feature | M | ⬜ | |
