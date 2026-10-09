@@ -16,7 +16,7 @@ Quem atualiza este arquivo é a IA. O `/proximo` marca 🟦 na branch nova. O `/
 | Ticket | Título | Tipo | Tam. | Status | Nota do review |
 |---|---|---|---|---|---|
 | [T-003](T-003-esqueleto-semantico.md) | Esqueleto semântico da página | feature | M | ✅ | ⚪ ponto final a mais no texto de copyright |
-| [T-004](T-004-base-visual.md) | Base visual com os tokens | feature | M | ⬜ | |
+| [T-004](T-004-base-visual.md) | Base visual com os tokens | feature | M | ✅ | ⚪ lembrar que a propriedade CSS de fonte é sempre font-family |
 | [T-005](T-005-cabecalho.md) | Cabeçalho no celular | feature | M | ⬜ | |
 | [T-006](T-006-hero.md) | Hero com chamada para agendar | feature | M | ⬜ | |
 | [T-007](T-007-card-de-servico.md) | Card de serviço | feature | M | ⬜ | |
