@@ -101,7 +101,15 @@ test.describe("no desktop", () => {
         .poll(readOutline, { message: `contorno de foco em "${name}"` })
         .toEqual({ style: "solid", width: "3px", color: focusColor });
     }
-    expect(names).toEqual(tabOrder);
+    // Compara pelo começo do nome: um sufixo como "(abre em outra aba)", que o guia
+    // de HTML recomenda para links externos, não muda a ordem.
+    expect(names, "quantidade de paradas do Tab").toHaveLength(tabOrder.length);
+    tabOrder.forEach((expected, index) => {
+      expect(
+        names[index]?.startsWith(expected),
+        `parada ${index + 1} do Tab: esperava "${expected}", veio "${names[index]}"`,
+      ).toBe(true);
+    });
   });
 
   // guarda de regressão: o T-012 já passa no axe no desktop; aqui o caso protege o link de pular e o foco.

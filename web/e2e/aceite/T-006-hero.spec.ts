@@ -10,7 +10,9 @@ test.beforeEach(async ({ page }) => {
 
 test("o hero tem a chamada e o botão para agendar", async ({ page }) => {
   const hero = page.locator("section#inicio");
-  await expect(hero.locator("p")).toContainText("sem fila e sem espera");
+  await expect(
+    hero.locator("p", { hasText: "sem fila e sem espera" }),
+  ).toBeVisible();
   await expect(
     hero.getByRole("link", { name: "Agendar horário" }),
   ).toHaveAttribute("href", "#servicos");

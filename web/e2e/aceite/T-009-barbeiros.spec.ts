@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { barbers } from "../../src/data/barbers";
 import { expectNoA11yViolations } from "../support/axe";
 import { gotoReady, stableBox } from "../support/page";
-import { MOBILE } from "../support/viewports";
+import { DESKTOP, MOBILE } from "../support/viewports";
 
 const cardOf = (page: Page, name: string) =>
   page
@@ -60,12 +60,27 @@ test.describe("no celular", () => {
     expect(Math.abs(second.y - first.y)).toBeLessThanOrEqual(2);
   });
 
-  test("as especialidades de cada card ficam lado a lado", async ({ page }) => {
+  // guarda de regressão: a seção de barbeiros já existe desde o T-003; aqui o caso protege os cards.
+  test("a seção de barbeiros passa no axe", async ({ page }) => {
+    await expectNoA11yViolations(page, { include: "section#barbeiros" });
+  });
+});
+
+// No desktop sobra espaço no card em qualquer estado do marco; no celular, a folga é de
+// poucos pixels e dependeria do padding que cada um escolhe para o card.
+test.describe("no desktop", () => {
+  test.use({ viewport: DESKTOP });
+
+  test("as especialidades ficam lado a lado e quebram linha se faltar espaço", async ({
+    page,
+  }) => {
     for (const barber of barbers) {
-      const items = cardOf(page, barber.name)
-        .getByRole("list", { name: "Especialidades" })
-        .getByRole("listitem");
+      const list = cardOf(page, barber.name).getByRole("list", {
+        name: "Especialidades",
+      });
+      const items = list.getByRole("listitem");
       await expect(items).toHaveCount(barber.specialties.length);
+      await expect(list).toHaveCSS("flex-wrap", "wrap");
       const boxes = await Promise.all(
         barber.specialties.map((_, index) => stableBox(items.nth(index))),
       );
@@ -76,10 +91,5 @@ test.describe("no celular", () => {
         ).toBeLessThanOrEqual(2);
       }
     }
-  });
-
-  // guarda de regressão: a seção de barbeiros já existe desde o T-003; aqui o caso protege os cards.
-  test("a seção de barbeiros passa no axe", async ({ page }) => {
-    await expectNoA11yViolations(page, { include: "section#barbeiros" });
   });
 });
