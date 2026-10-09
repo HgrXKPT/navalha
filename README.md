@@ -2,7 +2,7 @@
 
 Agendamento online para barbearia. O cliente escolhe o serviço, o barbeiro e o horário pelo celular, e o dono acompanha tudo num painel.
 
-**Demo:** [o link entra no T-002.](https://navalha-theta.vercel.app/)
+**Demo:** [navalha-theta.vercel.app](https://navalha-theta.vercel.app/)
 
 > Projeto de portfólio construído por tickets, como num time de produto: cada funcionalidade nasce num ticket do [backlog](backlog/BOARD.md), passa por review e por CI e é publicada a cada merge. Os [guias](guias/) são a consulta rápida durante os tickets.
 
@@ -10,8 +10,8 @@ Agendamento online para barbearia. O cliente escolhe o serviço, o barbeiro e o 
 
 | Marco                    | Entrega                                          | Status |
 | ------------------------ | ------------------------------------------------ | ------ |
-| 0 · Primeiro dia         | repositório, CI e deploy contínuo                | ⬜     |
-| 1 · Site público         | página da barbearia, responsiva e acessível      | ⬜     |
+| 0 · Primeiro dia         | repositório, CI e deploy contínuo                | ✅     |
+| 1 · Site público         | página da barbearia, responsiva e acessível      | 🟦     |
 | 2 · Agendamento no front | fluxo de agendamento em 5 etapas                 | ⬜     |
 | 3 · Fullstack            | API .NET com PostgreSQL e agendamento de verdade | ⬜     |
 | 4 · Painel do dono       | login, CRUD, filtros na URL e dashboard          | ⬜     |
