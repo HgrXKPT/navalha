@@ -1,9 +1,8 @@
 ---
 name: revisar
-description: "Revisa a branch do ticket atual como um PR: roda os checks e os testes de aceite, compara as telas e responde com veredito, critérios e comentários. Use quando o Higor digitar /revisar."
-disable-model-invocation: true
+description: "Revisa o código do aluno contra o 'Pronto quando' do dia atual e aponta até 3 problemas com arquivo:linha e uma pista, sem corrigir. Use quando o aluno digitar /revisar."
 ---
 
-Execute o protocolo **/revisar** descrito em `AGENTS.md`, na seção "Protocolo do /revisar".
+Execute o protocolo **/revisar** descrito em `AGENTS.md`, na seção "Protocolos dos comandos". Siga a regra central: dica, não solução.
 
-Contexto enviado pelo Higor (pode estar vazio): $ARGUMENTS
+Use como contexto o que o aluno escreveu junto do comando, se houver.

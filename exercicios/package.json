@@ -1,0 +1,13 @@
+{
+  "name": "exercicios",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:js": "node --test \"js/*.test.js\"",
+    "test:ts": "node --test \"ts-async/*.test.ts\"",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
