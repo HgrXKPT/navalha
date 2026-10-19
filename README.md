@@ -62,7 +62,7 @@ navalha/
 │   ├── Painel.slnx   # Solution file (.slnx)
 │   ├── src/          # Painel.Api, Painel.Application, Painel.Domain, Painel.Infrastructure
 │   └── tests/        # Painel.UnitTests (xUnit)
-├── dias/             # Roteiro das 17 User Stories (US-01 a US-17)
+├── backlog/          # Roteiro das 17 User Stories (US-01 a US-17)
 ├── decisoes/         # ADRs de engenharia front↔back
 ├── diario/           # Diário de bordo da evolução técnica
 ├── exercicios/       # Katas práticos de JavaScript e TypeScript
