@@ -13,8 +13,8 @@ jobs:
       run:
         working-directory: web
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
@@ -22,3 +22,18 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+
+  api:
+    name: api · build e test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Restore dependencies
+        run: dotnet restore api/Painel.slnx
+      - name: Build
+        run: dotnet build api/Painel.slnx --configuration Release --no-restore
+      - name: Test
+        run: dotnet test api/Painel.slnx --configuration Release --no-build --verbosity normal
