@@ -4,7 +4,7 @@
 
 [![Demo Vercel](https://img.shields.io/badge/Demo-Vercel-22c55e?style=for-the-badge&logo=vercel&logoColor=white)](https://navalha-theta.vercel.app/)
 [![Frontend](https://img.shields.io/badge/Frontend-React%2019%20%7C%20TypeScript%20Strict-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://navalha-theta.vercel.app/)
-[![Backend](https://img.shields.io/badge/Backend-.NET%2010%20%7C%20Clean%20Architecture-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](#arquitetura-backend-net-10)
+[![Backend](https://img.shields.io/badge/Backend-.NET%2010%20%7C%20Minimal%20API-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](#1-backend-minimal-api-net-10--c-moderno)
 [![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](#)
 
 <p align="center">
@@ -24,11 +24,12 @@
 
 ## ⚡ Destaques de Engenharia & Arquitetura
 
-### 1. Backend em Clean Architecture (.NET 10 / C# moderno)
-- **Domain Rico e Invariantes:** entidade `Solicitacao` com validação de regras de negócio, proteção contra transições ilegais de status e versionamento atômico.
-- **Tratamento Centralizado de Erros:** middleware global emitindo `ProblemDetails` padronizado conforme **RFC 9457**.
-- **Concorrência Otimista com ETag:** suporte a headers `ETag` e validação de `If-Match`, prevenindo *lost updates* com resposta `412 Precondition Failed`.
-- **Testes Automatizados:** suíte de testes de unidade em **xUnit** cobrindo cenários de borda e regras de negócio.
+### 1. Backend Minimal API (.NET 10 / C# moderno)
+- **API que cresce a cada dia:** um projeto único (`api/Painel.Api.csproj`) com os endpoints em `api/Program.cs`, escritos a partir do dia 02 e ampliados dia a dia pelas 17 User Stories.
+- **Contratos Imutáveis:** `record Solicitacao`, `record CriarSolicitacaoRequest` e `enum StatusSolicitacao` em `api/Contratos/SolicitacaoContratos.cs`.
+- **Documentação OpenAPI:** gerada pelo próprio app em desenvolvimento (`/openapi/v1.json`).
+- **JSON Alinhado ao Front:** propriedades em `camelCase` e enums em `snake_case`, com a mesma semente de dados do mock do painel.
+- **Histórico preservado:** a versão anterior, organizada em camadas e com testes xUnit, está na tag `arquitetura-completa`.
 
 ### 2. Frontend Reativo e Tipado (React 19 + TypeScript)
 - **Estado Mínimo e Dados Derivados:** eliminação de `useState` redundante para totais e filtros, prevenindo dessincronização de tela.
@@ -45,8 +46,8 @@ As escolhas técnicas de design de software são registradas formalmente em `dec
 | Camada | Tecnologias |
 | :--- | :--- |
 | **Frontend (`web/`)** | React 19, TypeScript strict, Vite 8, CSS Modules, Tokens de Design |
-| **Backend (`api/`)** | .NET 10, ASP.NET Core, Minimal APIs, Clean Architecture, xUnit |
-| **Qualidade & CI** | oxlint, Prettier, Vitest, GitHub Actions (build do front e testes .NET em paralelo) |
+| **Backend (`api/`)** | .NET 10, ASP.NET Core, Minimal APIs |
+| **Qualidade & CI** | oxlint, Prettier, Vitest, GitHub Actions (build do front e da API em paralelo) |
 | **Infra & Deploy** | Vercel (Frontend), Docker Compose (PostgreSQL em roadmap) |
 
 ---
@@ -58,10 +59,11 @@ navalha/
 ├── web/              # Aplicação React 19 + Vite (deploy Vercel)
 │   ├── src/          # Componentes, mocks, tipos e design tokens
 │   └── package.json  # Scripts de dev, build, check e format
-├── api/              # Solução .NET 10 em Clean Architecture
-│   ├── Painel.slnx   # Solution file (.slnx)
-│   ├── src/          # Painel.Api, Painel.Application, Painel.Domain, Painel.Infrastructure
-│   └── tests/        # Painel.UnitTests (xUnit)
+├── api/              # API .NET 10 em Minimal API (projeto único)
+│   ├── Painel.Api.csproj
+│   ├── Program.cs    # Endpoints, que crescem a cada dia de User Story
+│   ├── Contratos/    # SolicitacaoContratos.cs (records e enum)
+│   └── Properties/   # launchSettings.json (portas 5220/7272)
 ├── backlog/          # Roteiro das 17 User Stories (US-01 a US-17)
 ├── decisoes/         # ADRs de engenharia front↔back
 ├── diario/           # Diário de bordo da evolução técnica
@@ -94,8 +96,8 @@ npm run check
 
 ### Backend (`api/`)
 ```powershell
-dotnet test api/Painel.slnx
-dotnet run --project api/src/Painel.Api
+dotnet build api/Painel.Api.csproj
+dotnet run --project api
 ```
 A API estará disponível com documentação OpenAPI ativa em desenvolvimento.
 
