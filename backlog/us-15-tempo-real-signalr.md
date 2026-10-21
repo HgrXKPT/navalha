@@ -1,18 +1,18 @@
-# US-15 (Dia 15) ó SincronizaÁ„o em Tempo Real entre Atendentes com SignalR
+# US-15 (Dia 15) ‚Äî Sincroniza√ß√£o em Tempo Real entre Atendentes com SignalR
 
-> **Fase 5: integraÁ„o avanÁada** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 14 (e o login por cookie do dia 12 funcionando)
+> **Fase 5: integra√ß√£o avan√ßada** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 14 (e o login por cookie do dia 12 funcionando)
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
 **Como** atendente de suporte em um ambiente colaborativo,  
-**quero** que a listagem e os detalhes de chamados sejam atualizados automaticamente no momento exato em que outro usu·rio conclui ou abre uma solicitaÁ„o,  
-**para** visualizar sempre os dados em tempo real sem precisar teclar F5 e diminuir drasticamente a probabilidade de conflitos de concorrÍncia 412.
+**quero** que a listagem e os detalhes de chamados sejam atualizados automaticamente no momento exato em que outro usu√°rio conclui ou abre uma solicita√ß√£o,  
+**para** visualizar sempre os dados em tempo real sem precisar teclar F5 e diminuir drasticamente a probabilidade de conflitos de concorr√™ncia 412.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. Qual È a diferenÁa entre 409 e 412? (dia 14)
+1. Qual √© a diferen√ßa entre 409 e 412? (dia 14)
 2. Por que a ETag precisa viajar junto com o dado no cache? (dia 14)
 3. Em uma frase, quando usar `useEffect`? (dia 5)
 
@@ -20,101 +20,102 @@
 
 ## Ponte com .NET
 
-- **SignalR Hub no ASP.NET Core (`IHubContext<T>`):** VocÍ dispara notificaÁıes em broadcast para os clientes conectados a partir de qualquer endpoint apÛs a persistÍncia bem-sucedida.
-- **Cliente JavaScript (`@microsoft/signalr`) È um subsistema externo:** Por manter uma conex„o de socket contÌnua durante a sess„o, seu ciclo de vida no React deve residir obrigatoriamente dentro de um `useEffect` dotado de funÁ„o de limpeza (`connection.stop()`).
-- **Onde quebra:** No backend, as chamadas a controllers s„o pontuais e efÍmeras. No frontend, o socket permanece aberto indefinidamente; se a rede oscilar, a conex„o cai, reconecta e **todos os eventos emitidos durante a queda s„o perdidos**. A aplicaÁ„o deve tratar explicitamente a reconex„o.
+- **SignalR Hub no ASP.NET Core (`IHubContext<T>`):** Voc√™ dispara notifica√ß√µes em broadcast para os clientes conectados a partir de qualquer endpoint ap√≥s a persist√™ncia bem-sucedida.
+- **Cliente JavaScript (`@microsoft/signalr`) √© um subsistema externo:** Por manter uma conex√£o de socket cont√≠nua durante a sess√£o, seu ciclo de vida no React deve residir obrigatoriamente dentro de um `useEffect` dotado de fun√ß√£o de limpeza (`connection.stop()`).
+- **Onde quebra:** No backend, as chamadas a controllers s√£o pontuais e ef√™meras. No frontend, o socket permanece aberto indefinidamente; se a rede oscilar, a conex√£o cai, reconecta e **todos os eventos emitidos durante a queda s√£o perdidos**. A aplica√ß√£o deve tratar explicitamente a reconex√£o.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta 1:** qual tecnologia adotar para comunicaÁ„o reativa com o cliente?
+**Pergunta 1:** qual tecnologia adotar para comunica√ß√£o reativa com o cliente?
 
 | Tecnologia | Como opera | Vantagens | Desvantagens | Quando Escolher |
 |---|---|---|---|---|
-| **Short/Long Polling** (`refetchInterval`) | O frontend dispara requisiÁıes HTTP a cada N segundos | Zero infraestrutura adicional | Sobrecarga constante de rede; atraso proporcional ao intervalo de poll | Poucos clientes onde delay de 30s È irrelevante |
-| **Server-Sent Events (SSE)** | Fluxo HTTP unidirecional (Servidor ? Cliente) | Leve e com reconex„o nativa do navegador | Apenas unidirecional; suporte legado limitado | Feeds de notÌcias, logs e notificaÁıes passivas |
-| **ASP.NET Core SignalR** (WebSockets) | Canal bidirecional persistente full-duplex com fallback | IntegraÁ„o nativa com o backend .NET, grupos e autorizaÁ„o | Requer backplane (Redis / Azure SignalR) ao escalar inst‚ncias | AplicaÁıes colaborativas e painÈis corporativos din‚micos |
+| **Short/Long Polling** (`refetchInterval`) | O frontend dispara requisi√ß√µes HTTP a cada N segundos | Zero infraestrutura adicional | Sobrecarga constante de rede; atraso proporcional ao intervalo de poll | Poucos clientes onde delay de 30s √© irrelevante |
+| **Server-Sent Events (SSE)** | Fluxo HTTP unidirecional (Servidor ? Cliente) | Leve e com reconex√£o nativa do navegador | Apenas unidirecional; suporte legado limitado | Feeds de not√≠cias, logs e notifica√ß√µes passivas |
+| **ASP.NET Core SignalR** (WebSockets) | Canal bidirecional persistente full-duplex com fallback | Integra√ß√£o nativa com o backend .NET, grupos e autoriza√ß√£o | Requer backplane (Redis / Azure SignalR) ao escalar inst√¢ncias | Aplica√ß√µes colaborativas e pain√©is corporativos din√¢micos |
 
 **Pergunta 2:** o que o evento de tempo real deve carregar em seu payload?
-- **O Payload Completo do Objeto:** Elimina uma requisiÁ„o HTTP subsequente, mas **duplica lÛgica de autorizaÁ„o e serializaÁ„o** e cria risco de vazamento de dados para perfis n„o autorizados que interceptem o WebSocket.
-- **Apenas Sinalizador de InvalidaÁ„o (`{ id }`):** A mensagem avisa: *"A solicitaÁ„o 42 foi alterada"*. O frontend recebe o sinal e delega ao TanStack Query a decis„o de revalidar via REST as queries que estiverem ativas na tela.
+- **O Payload Completo do Objeto:** Elimina uma requisi√ß√£o HTTP subsequente, mas **duplica l√≥gica de autoriza√ß√£o e serializa√ß√£o** e cria risco de vazamento de dados para perfis n√£o autorizados que interceptem o WebSocket.
+- **Apenas Sinalizador de Invalida√ß√£o (`{ id }`):** A mensagem avisa: *"A solicita√ß√£o 42 foi alterada"*. O frontend recebe o sinal e delega ao TanStack Query a decis√£o de revalidar via REST as queries que estiverem ativas na tela.
 
-**RecomendaÁ„o:** utilize **SignalR com sinalizaÁ„o leve de invalidaÁ„o**. Trate a reconex„o (`onreconnected`) invalidando todas as consultas ativas para recuperar o estado atualizado do banco.
+**Recomenda√ß√£o:** utilize **SignalR com sinaliza√ß√£o leve de invalida√ß√£o**. Trate a reconex√£o (`onreconnected`) invalidando todas as consultas ativas para recuperar o estado atualizado do banco.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Hub SignalR e Disparo de Eventos
+### Backend (`api/`) ‚Äî Hub SignalR e Disparo de Eventos
 - Em `api/Program.cs`:
   - Registrar SignalR: `builder.Services.AddSignalR()`.
-  - Criar e mapear a classe `SolicitacoesHub : Hub` na rota `/hubs/solicitacoes`, exigindo autenticaÁ„o (`RequireAuthorization()`).
-  - No `POST /solicitacoes` e no `PATCH /solicitacoes/{id}/status`: injetar `IHubContext<SolicitacoesHub>` e, apÛs persistir, disparar em broadcast para todos os conectados:
+  - Criar e mapear a classe `SolicitacoesHub : Hub` na rota `/hubs/solicitacoes`, exigindo autentica√ß√£o (`RequireAuthorization()`).
+  - No `POST /solicitacoes` e no `PATCH /solicitacoes/{id}/status`: injetar `IHubContext<SolicitacoesHub>` e, ap√≥s persistir, disparar em broadcast para todos os conectados:
     ```csharp
     await hubContext.Clients.All.SendAsync("SolicitacaoAlterada", new { id = solicitacao.Id });
     ```
   - *Nunca enviar a entidade inteira pelo canal do WebSocket.*
+- No mesmo dia o front assina o hub e passa a atualizar a listagem em tempo real.
 
-### Frontend (`web/`) ó Conex„o Reativa e InvalidaÁ„o de Cache
-- **Passo 1 ó Proxy de WebSockets no Vite:** Em `vite.config.ts`, configurar a rota `/hubs/solicitacoes` com a flag `ws: true` para que o proxy repasse o handshake do WebSocket.
-- **Passo 2 ó Custom Hook de Conex„o:** Instalar `@microsoft/signalr` e implementar o hook `src/hooks/useAtualizacoesAoVivo.ts`:
-  - Instanciar a conex„o com `HubConnectionBuilder.withUrl('/hubs/solicitacoes').withAutomaticReconnect().build()`.
-  - No `useEffect`, iniciar a conex„o (`connection.start()`).
+### Frontend (`web/`) ‚Äî Conex√£o Reativa e Invalida√ß√£o de Cache
+- **Passo 1 ‚Äî Proxy de WebSockets no Vite:** Em `vite.config.ts`, configurar a rota `/hubs/solicitacoes` com a flag `ws: true` para que o proxy repasse o handshake do WebSocket.
+- **Passo 2 ‚Äî Custom Hook de Conex√£o:** Instalar `@microsoft/signalr` e implementar o hook `src/hooks/useAtualizacoesAoVivo.ts`:
+  - Instanciar a conex√£o com `HubConnectionBuilder.withUrl('/hubs/solicitacoes').withAutomaticReconnect().build()`.
+  - No `useEffect`, iniciar a conex√£o (`connection.start()`).
   - Escutar o evento `SolicitacaoAlterada` com payload `{ id: number }`:
     - Invalidar `['solicitacoes']` (atualiza listagem).
     - Invalidar `['solicitacao', id]` (atualiza detalhes se abertos).
   - Configurar `connection.onreconnected(() => queryClient.invalidateQueries({ queryKey: ['solicitacoes'] }))`.
   - No retorno de cleanup do efeito, invocar obrigatoriamente `connection.stop()`.
-- **Passo 3 ó AtivaÁ„o Global:** Invocar `useAtualizacoesAoVivo()` uma ˙nica vez prÛximo ‡ raiz da ·rvore autenticada.
-- **Passo 4 ó ValidaÁ„o em M˙ltiplos Navegadores:** Abrir a aplicaÁ„o em dois navegadores logados (ex.: Ana e Carlos). Concluir uma solicitaÁ„o em um navegador e constatar a atualizaÁ„o imediata no outro sem recarregar a p·gina.
-- **Passo 5 ó ADR 15:** Registrar em `decisoes/15-tempo-real.md` a decis„o por SignalR com payload mÌnimo de invalidaÁ„o.
+- **Passo 3 ‚Äî Ativa√ß√£o Global:** Invocar `useAtualizacoesAoVivo()` uma √∫nica vez pr√≥ximo √† raiz da √°rvore autenticada.
+- **Passo 4 ‚Äî Valida√ß√£o em M√∫ltiplos Navegadores:** Abrir a aplica√ß√£o em dois navegadores logados (ex.: Ana e Carlos). Concluir uma solicita√ß√£o em um navegador e constatar a atualiza√ß√£o imediata no outro sem recarregar a p√°gina.
+- **Passo 5 ‚Äî ADR 15:** Registrar em `decisoes/15-tempo-real.md` a decis√£o por SignalR com payload m√≠nimo de invalida√ß√£o.
 
-### ReferÍncias TÈcnicas
-- AutenticaÁ„o e AutorizaÁ„o no SignalR: https://learn.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz
-- SeguranÁa no SignalR (CORS e Origem): https://learn.microsoft.com/en-us/aspnet/core/signalr/security
+### Refer√™ncias T√©cnicas
+- Autentica√ß√£o e Autoriza√ß√£o no SignalR: https://learn.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz
+- Seguran√ßa no SignalR (CORS e Origem): https://learn.microsoft.com/en-us/aspnet/core/signalr/security
 - Cliente JavaScript do SignalR: https://learn.microsoft.com/en-us/aspnet/core/signalr/javascript-client
 - Using WebSockets with React Query (TkDodo): https://tkdodo.eu/blog/using-web-sockets-with-react-query
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O hub `/hubs/solicitacoes` exige sess„o autenticada e aceita conexıes WebSockets com credenciais.
-- [ ] **CA 2 (BE):** AlteraÁıes de status e novas solicitaÁıes emitem o evento `SolicitacaoAlterada` contendo estritamente `{ id }`.
-- [ ] **CA 3 (FE):** A aba Network (com filtro WS) exibe uma ˙nica conex„o de WebSocket ativa e est·vel.
-- [ ] **CA 4 (FE):** A conex„o È encerrada de forma limpa (`connection.stop()`) caso o componente raiz seja desmontado.
-- [ ] **CA 5 (FE):** Ao alterar uma solicitaÁ„o na janela A, a janela B reflete a atualizaÁ„o do status em tempo real sem intervenÁ„o do usu·rio.
-- [ ] **CA 6 (FE):** Caso o servidor seja reiniciado temporariamente, a reconex„o autom·tica (`onreconnected`) dispara a revalidaÁ„o global das queries pendentes.
-- [ ] **CA 7 (ADR):** O arquivo `decisoes/15-tempo-real.md` est· formalizado justificando a escolha de SignalR versus Polling e SSE.
+- [ ] **CA 1 (BE):** O hub `/hubs/solicitacoes` exige sess√£o autenticada e aceita conex√µes WebSockets com credenciais.
+- [ ] **CA 2 (BE):** Altera√ß√µes de status e novas solicita√ß√µes emitem o evento `SolicitacaoAlterada` contendo estritamente `{ id }`.
+- [ ] **CA 3 (FE):** A aba Network (com filtro WS) exibe uma √∫nica conex√£o de WebSocket ativa e est√°vel.
+- [ ] **CA 4 (FE):** A conex√£o √© encerrada de forma limpa (`connection.stop()`) caso o componente raiz seja desmontado.
+- [ ] **CA 5 (FE):** Ao alterar uma solicita√ß√£o na janela A, a janela B reflete a atualiza√ß√£o do status em tempo real sem interven√ß√£o do usu√°rio.
+- [ ] **CA 6 (FE):** Caso o servidor seja reiniciado temporariamente, a reconex√£o autom√°tica (`onreconnected`) dispara a revalida√ß√£o global das queries pendentes.
+- [ ] **CA 7 (ADR):** O arquivo `decisoes/15-tempo-real.md` est√° formalizado justificando a escolha de SignalR versus Polling e SSE.
 
 ---
 
 ## Armadilhas Comuns
 
-- **Cleanup ausente em `useEffect`:** Em desenvolvimento com `StrictMode`, o efeito roda duas vezes; sem `connection.stop()`, duas conexıes permanentes de WebSocket s„o abertas e cada evento ser· processado em duplicidade.
-- **Instanciar a conex„o dentro de componentes de apresentaÁ„o:** Faz com que um novo socket seja aberto a cada renderizaÁ„o da lista.
-- **Negligenciar o `onreconnected`:** Se a internet oscilar e restabelecer, a tela exibir· dados velhos atÈ que o usu·rio manualmente tecle F5.
+- **Cleanup ausente em `useEffect`:** Em desenvolvimento com `StrictMode`, o efeito roda duas vezes; sem `connection.stop()`, duas conex√µes permanentes de WebSocket s√£o abertas e cada evento ser√° processado em duplicidade.
+- **Instanciar a conex√£o dentro de componentes de apresenta√ß√£o:** Faz com que um novo socket seja aberto a cada renderiza√ß√£o da lista.
+- **Negligenciar o `onreconnected`:** Se a internet oscilar e restabelecer, a tela exibir√° dados velhos at√© que o usu√°rio manualmente tecle F5.
 
 ---
 
 ## Prompts Prontos
 
-- "Compare polling, SSE e SignalR para um painel interno com 20 atendentes. Me dÍ os critÈrios, sem decidir por mim."
+- "Compare polling, SSE e SignalR para um painel interno com 20 atendentes. Me d√™ os crit√©rios, sem decidir por mim."
 
 ---
 
 ## Pronto quando
 
-- [ ] Com duas abas, uma mudanÁa numa aparece na outra sem F5, por invalidaÁ„o.
-- [ ] Depois de uma reconex„o a lista È invalidada, e na aba Network (filtro WS) existe uma conex„o sÛ.
-- [ ] VocÍ explica polling vs. SSE vs. SignalR, e por que o evento leva sÛ o id.
-- [ ] O ADR `decisoes/15-tempo-real.md` est· registrado.
+- [ ] Com duas abas, uma mudan√ßa numa aparece na outra sem F5, por invalida√ß√£o.
+- [ ] Depois de uma reconex√£o a lista √© invalidada, e na aba Network (filtro WS) existe uma conex√£o s√≥.
+- [ ] Voc√™ explica polling vs. SSE vs. SignalR, e por que o evento leva s√≥ o id.
+- [ ] O ADR `decisoes/15-tempo-real.md` est√° registrado.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-15.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-15): atualizaÁ„o em tempo real com signalr"`.
-3. PrÛximo: [Dia 16 ó Deploy e mesma origem](us-16-hospedagem-unificada-cache.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-15): atualiza√ß√£o em tempo real com signalr"`.
+3. Pr√≥ximo: [Dia 16 ‚Äî Deploy e mesma origem](us-16-hospedagem-unificada-cache.md).

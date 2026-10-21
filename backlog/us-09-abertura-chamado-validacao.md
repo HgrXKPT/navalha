@@ -1,68 +1,69 @@
-# US-09 (Dia 09) ó Abertura de SolicitaÁ„o com ValidaÁ„o de Formato e Regras de NegÛcio
+# US-09 (Dia 09) ‚Äî Abertura de Solicita√ß√£o com Valida√ß√£o de Formato e Regras de Neg√≥cio
 
-> **Fase 3: fronteira com o back** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 08
+> **Fase 3: fronteira com o back** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 08
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
 **Como** atendente de suporte,  
-**quero** cadastrar uma nova solicitaÁ„o de atendimento atravÈs de um formul·rio com validaÁ„o imediata nos campos e mensagens claras caso o backend recuse o registro,  
-**para** registrar chamados de clientes garantindo a integridade dos dados e prevenindo duplicidades de solicitaÁıes abertas.
+**quero** cadastrar uma nova solicita√ß√£o de atendimento atrav√©s de um formul√°rio com valida√ß√£o imediata nos campos e mensagens claras caso o backend recuse o registro,  
+**para** registrar chamados de clientes garantindo a integridade dos dados e prevenindo duplicidades de solicita√ß√µes abertas.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. O que vai para a URL e o que n„o vai? (dia 8)
-2. Por que filtrar no cliente dados que o usu·rio n„o pode ver È um vazamento? (dia 7)
-3. Que status HTTP o contrato usa para regra de negÛcio violada? (dia 6)
+1. O que vai para a URL e o que n√£o vai? (dia 8)
+2. Por que filtrar no cliente dados que o usu√°rio n√£o pode ver √© um vazamento? (dia 7)
+3. Que status HTTP o contrato usa para regra de neg√≥cio violada? (dia 6)
 
 ---
 
 ## Ponte com .NET
 
-- **Zod ò FluentValidation no C#**, com uma grande vantagem: `z.infer<typeof schema>` deriva o tipo TypeScript diretamente da regra de validaÁ„o (como se o validator gerasse o DTO C# automaticamente).
-- **ValidationProblem (400) com dicion·rio de `errors` e ProblemDetails (409)** produzidos pelo ASP.NET Core viram erros de campo e mensagens globais na UI.
-- **Onde quebra:** No backend, a validaÁ„o È **fronteira de seguranÁa e integridade**. No frontend, a validaÁ„o È **apenas experiÍncia do usu·rio (UX)** ó qualquer agente externo pode contornar a tela e disparar requisiÁıes diretamente para a API via cURL ou Postman.
+- **Zod Àú FluentValidation no C#**, com uma grande vantagem: `z.infer<typeof schema>` deriva o tipo TypeScript diretamente da regra de valida√ß√£o (como se o validator gerasse o DTO C# automaticamente).
+- **ValidationProblem (400) com dicion√°rio de `errors` e ProblemDetails (409)** produzidos pelo ASP.NET Core viram erros de campo e mensagens globais na UI.
+- **Onde quebra:** No backend, a valida√ß√£o √© **fronteira de seguran√ßa e integridade**. No frontend, a valida√ß√£o √© **apenas experi√™ncia do usu√°rio (UX)** ‚Äî qualquer agente externo pode contornar a tela e disparar requisi√ß√µes diretamente para a API via cURL ou Postman.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta:** onde deve residir cada tipo de validaÁ„o da aplicaÁ„o?
+**Pergunta:** onde deve residir cada tipo de valida√ß√£o da aplica√ß√£o?
 
 | Tipo de Regra | Exemplo no Painel | Front | Back | Justificativa Arquitetural |
 |---|---|:---:|:---:|---|
-| **Formato e Obrigatoriedade** | `cliente` (3 a 100 caracteres); `valor` > 0 | ? UX | ? ProteÁ„o | O frontend orienta a digitaÁ„o; o backend protege a integridade |
-| **Limite de DomÌnio Simples** | `valor` = 10.000 | ? Espelha | ? Verdade | Regra mantida no backend; front espelha para feedback r·pido |
-| **Regra Dependente de PersistÍncia** | Cliente n„o pode ter 2 solicitaÁıes `aberta` simult‚neas | ? | ? (409) | Apenas o servidor enxerga concorrÍncia e estado global do banco |
-| **ValidaÁ„o de TransiÁıes de Estado** | Status `concluida` n„o transiciona para `aberta` | Desabilita bot„o | ? (409) | Telas concorrentes podem tentar transiÁıes inv·lidas |
-| **Permissıes de Acesso** | Somente supervisor pode recusar chamada | Oculta bot„o | ? (403) | Ocultar UI È apenas UX; a seguranÁa reside nos endpoints |
-| **C·lculos Financeiros** | Valor final e descontos | PrÈvia visual | ? Recalcula | Jamais confie em valores monet·rios calculados no navegador |
+| **Formato e Obrigatoriedade** | `cliente` (3 a 100 caracteres); `valor` > 0 | ? UX | ? Prote√ß√£o | O frontend orienta a digita√ß√£o; o backend protege a integridade |
+| **Limite de Dom√≠nio Simples** | `valor` = 10.000 | ? Espelha | ? Verdade | Regra mantida no backend; front espelha para feedback r√°pido |
+| **Regra Dependente de Persist√™ncia** | Cliente n√£o pode ter 2 solicita√ß√µes `aberta` simult√¢neas | ? | ? (409) | Apenas o servidor enxerga concorr√™ncia e estado global do banco |
+| **Valida√ß√£o de Transi√ß√µes de Estado** | Status `concluida` n√£o transiciona para `aberta` | Desabilita bot√£o | ? (409) | Telas concorrentes podem tentar transi√ß√µes inv√°lidas |
+| **Permiss√µes de Acesso** | Somente supervisor pode recusar chamada | Oculta bot√£o | ? (403) | Ocultar UI √© apenas UX; a seguran√ßa reside nos endpoints |
+| **C√°lculos Financeiros** | Valor final e descontos | Pr√©via visual | ? Recalcula | Jamais confie em valores monet√°rios calculados no navegador |
 
-**Regra de ouro:** o frontend valida para **ajudar o usu·rio**; o backend valida para **proteger a integridade do sistema**.
+**Regra de ouro:** o frontend valida para **ajudar o usu√°rio**; o backend valida para **proteger a integridade do sistema**.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Endpoint POST e Regras de NegÛcio
+### Backend (`api/`) ‚Äî Endpoint POST e Regras de Neg√≥cio
 - Em `api/Program.cs`, implementar o endpoint `POST /solicitacoes` recebendo `CriarSolicitacaoRequest`.
-- **ValidaÁıes de Formato (HTTP 400):**
+- **Valida√ß√µes de Formato (HTTP 400):**
   - Retornar `Results.ValidationProblem(errors)` caso `cliente` tenha menos de 3 ou mais de 100 caracteres, ou se `valor <= 0` ou `valor > 10000`.
-- **Regras de NegÛcio (HTTP 409):**
-  - Retornar `Results.Problem(detail: "Cliente j· possui uma solicitaÁ„o aberta.", statusCode: 409)` se j· existir chamado com status `Aberta` para o mesmo cliente.
-- Ao salvar com sucesso, persistir na lista em memÛria e retornar `Results.Created($"/solicitacoes/{nova.Id}", nova)`.
+- **Regras de Neg√≥cio (HTTP 409):**
+  - Retornar `Results.Problem(detail: "Cliente j√° possui uma solicita√ß√£o aberta.", statusCode: 409)` se j√° existir chamado com status `Aberta` para o mesmo cliente.
+- Ao salvar com sucesso, persistir na lista em mem√≥ria e retornar `Results.Created($"/solicitacoes/{nova.Id}", nova)`.
+- No mesmo dia o front envia o formul√°rio (react-hook-form + zod) para a API real.
 
-### Frontend (`web/`) ó Formul·rio com React Hook Form e Zod
-- **Passo 1 ó Schema de ValidaÁ„o:** Instalar `react-hook-form`, `zod` e `@hookform/resolvers`. Criar em `src/paginas/NovaSolicitacao.tsx` o schema Zod espelhando as regras de formato do backend.
-- **Passo 2 ó Feedback por Campo:** Integrar `useForm` com `zodResolver(schema)`. Renderizar mensagens de erro logo abaixo de cada input que falhar na validaÁ„o.
-- **Passo 3 ó Envio e InvalidaÁ„o:** Enviar os dados via `useMutation` (POST). No sucesso, invalidar `['solicitacoes']` e navegar via `useNavigate` para a tela de detalhes do item criado.
-- **Passo 4 ó Mapeamento de Erros da API:**
-  - Se a API retornar **400 ValidationProblem**: mapear o dicion·rio `errors` para os respectivos campos do formul·rio usando `setError`.
-  - Se a API retornar **409 Conflict**: exibir alerta de negÛcio no topo do formul·rio sem limpar os dados preenchidos.
-- **Passo 5 ó ADR 09:** Registrar em `decisoes/09-validacao-front-back.md` a matriz de validaÁ„o distribuÌda entre camadas.
+### Frontend (`web/`) ‚Äî Formul√°rio com React Hook Form e Zod
+- **Passo 1 ‚Äî Schema de Valida√ß√£o:** Instalar `react-hook-form`, `zod` e `@hookform/resolvers`. Criar em `src/paginas/NovaSolicitacao.tsx` o schema Zod espelhando as regras de formato do backend.
+- **Passo 2 ‚Äî Feedback por Campo:** Integrar `useForm` com `zodResolver(schema)`. Renderizar mensagens de erro logo abaixo de cada input que falhar na valida√ß√£o.
+- **Passo 3 ‚Äî Envio e Invalida√ß√£o:** Enviar os dados via `useMutation` (POST). No sucesso, invalidar `['solicitacoes']` e navegar via `useNavigate` para a tela de detalhes do item criado.
+- **Passo 4 ‚Äî Mapeamento de Erros da API:**
+  - Se a API retornar **400 ValidationProblem**: mapear o dicion√°rio `errors` para os respectivos campos do formul√°rio usando `setError`.
+  - Se a API retornar **409 Conflict**: exibir alerta de neg√≥cio no topo do formul√°rio sem limpar os dados preenchidos.
+- **Passo 5 ‚Äî ADR 09:** Registrar em `decisoes/09-validacao-front-back.md` a matriz de valida√ß√£o distribu√≠da entre camadas.
 
-### ReferÍncias TÈcnicas
+### Refer√™ncias T√©cnicas
 - React Hook Form Getting Started: https://react-hook-form.com/get-started
 - Zod Documentation: https://zod.dev/basics
 - Hookform Resolvers: https://github.com/react-hook-form/resolvers
@@ -70,38 +71,38 @@
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O endpoint `POST /solicitacoes` retorna 400 com `ValidationProblem` para payloads com cliente ou valor inv·lidos.
-- [ ] **CA 2 (BE):** O backend responde 409 com `ProblemDetails` ao tentar cadastrar uma solicitaÁ„o para um cliente que j· possui solicitaÁ„o aberta.
-- [ ] **CA 3 (FE):** Erros de formato (ex.: nome curto ou valor negativo) s„o sinalizados em vermelho abaixo dos campos antes de qualquer disparo de requisiÁ„o de rede.
-- [ ] **CA 4 (FE):** Erros 400 retornados pelo backend s„o mapeados automaticamente para os campos correspondentes via `setError`.
-- [ ] **CA 5 (FE):** O erro de negÛcio 409 È renderizado como um alerta geral de topo, mantendo o formul·rio preenchido.
-- [ ] **CA 6 (FE):** Ao cadastrar com sucesso, o sistema redireciona para a tela de detalhes do chamado recÈm-criado.
-- [ ] **CA 7 (ADR):** O arquivo `decisoes/09-validacao-front-back.md` est· formalizado contendo a classificaÁ„o de todas as regras do domÌnio.
+- [ ] **CA 1 (BE):** O endpoint `POST /solicitacoes` retorna 400 com `ValidationProblem` para payloads com cliente ou valor inv√°lidos.
+- [ ] **CA 2 (BE):** O backend responde 409 com `ProblemDetails` ao tentar cadastrar uma solicita√ß√£o para um cliente que j√° possui solicita√ß√£o aberta.
+- [ ] **CA 3 (FE):** Erros de formato (ex.: nome curto ou valor negativo) s√£o sinalizados em vermelho abaixo dos campos antes de qualquer disparo de requisi√ß√£o de rede.
+- [ ] **CA 4 (FE):** Erros 400 retornados pelo backend s√£o mapeados automaticamente para os campos correspondentes via `setError`.
+- [ ] **CA 5 (FE):** O erro de neg√≥cio 409 √© renderizado como um alerta geral de topo, mantendo o formul√°rio preenchido.
+- [ ] **CA 6 (FE):** Ao cadastrar com sucesso, o sistema redireciona para a tela de detalhes do chamado rec√©m-criado.
+- [ ] **CA 7 (ADR):** O arquivo `decisoes/09-validacao-front-back.md` est√° formalizado contendo a classifica√ß√£o de todas as regras do dom√≠nio.
 
 ---
 
 ## Armadilhas Comuns
 
-- **ValidaÁ„o de frontend n„o È barreira de seguranÁa:** Nunca assuma que os dados recebidos pelo backend s„o v·lidos sÛ porque o frontend implementa validaÁ„o com Zod.
-- **Tratar 409 como erro de campo:** Viola a sem‚ntica de ProblemDetails; regras de negÛcio globais n„o devem ser amarradas a um input especÌfico de texto.
-- **Inputs numÈricos em HTML:** O elemento `<input type="number">` entrega valores no formato string para o JavaScript. Use `z.coerce.number()` no Zod.
+- **Valida√ß√£o de frontend n√£o √© barreira de seguran√ßa:** Nunca assuma que os dados recebidos pelo backend s√£o v√°lidos s√≥ porque o frontend implementa valida√ß√£o com Zod.
+- **Tratar 409 como erro de campo:** Viola a sem√¢ntica de ProblemDetails; regras de neg√≥cio globais n√£o devem ser amarradas a um input espec√≠fico de texto.
+- **Inputs num√©ricos em HTML:** O elemento `<input type="number">` entrega valores no formato string para o JavaScript. Use `z.coerce.number()` no Zod.
 
 ---
 
 ## Prompts Prontos
 
-- "Classifiquei estas regras entre front e back: <cole>. Alguma est· no lugar errado? Me dÍ o critÈrio, n„o a resposta."
-- "Como mapear os errors de um ValidationProblem do ASP.NET para os campos do react-hook-form? Me dÍ o conceito, sem o cÛdigo completo."
+- "Classifiquei estas regras entre front e back: <cole>. Alguma est√° no lugar errado? Me d√™ o crit√©rio, n√£o a resposta."
+- "Como mapear os errors de um ValidationProblem do ASP.NET para os campos do react-hook-form? Me d√™ o conceito, sem o c√≥digo completo."
 
 ---
 
 ## Pronto quando
 
-- [ ] Criar uma solicitaÁ„o funciona de ponta a ponta, e os erros de formato aparecem por campo antes do envio.
+- [ ] Criar uma solicita√ß√£o funciona de ponta a ponta, e os erros de formato aparecem por campo antes do envio.
 - [ ] O 400 do back aparece no campo certo, e o 409 aparece como mensagem geral.
-- [ ] VocÍ mostrou que o back recusa um POST inv·lido feito sem a tela.
+- [ ] Voc√™ mostrou que o back recusa um POST inv√°lido feito sem a tela.
 - [ ] O ADR `decisoes/09-validacao-front-back.md` classifica cada regra do contrato.
 
 ---
@@ -109,5 +110,5 @@
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-09.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-09): formul·rio e validaÁ„o front/back"`.
-3. PrÛximo: [Dia 10 ó Erros e estados de tela](us-10-resiliencia-problemdetails.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-09): formul√°rio e valida√ß√£o front/back"`.
+3. Pr√≥ximo: [Dia 10 ‚Äî Erros e estados de tela](us-10-resiliencia-problemdetails.md).

@@ -1,76 +1,77 @@
-# US-12 (Dia 12) ó AutenticaÁ„o por Cookie HttpOnly e Controle de Acesso por Perfil
+# US-12 (Dia 12) ‚Äî Autentica√ß√£o por Cookie HttpOnly e Controle de Acesso por Perfil
 
-> **Fase 4: qualidade de produÁ„o** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 11
+> **Fase 4: qualidade de produ√ß√£o** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 11
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
-**Como** usu·rio do sistema (atendente ou supervisor),  
-**quero** autenticar minha sess„o via credenciais com cookies protegidos contra furto de scripts e acessar apenas as aÁıes autorizadas para meu perfil,  
-**para** operar a aplicaÁ„o com seguranÁa e receber alertas adequados caso tente executar operaÁıes restritas a supervisores.
+**Como** usu√°rio do sistema (atendente ou supervisor),  
+**quero** autenticar minha sess√£o via credenciais com cookies protegidos contra furto de scripts e acessar apenas as a√ß√µes autorizadas para meu perfil,  
+**para** operar a aplica√ß√£o com seguran√ßa e receber alertas adequados caso tente executar opera√ß√µes restritas a supervisores.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. Em que ordem deixar uma p·gina leve? (dia 11)
-2. Quando CSR È a escolha certa? (dia 11)
-3. Esconder o bot„o "Recusar" do atendente È seguranÁa? (dia 9)
+1. Em que ordem deixar uma p√°gina leve? (dia 11)
+2. Quando CSR √© a escolha certa? (dia 11)
+3. Esconder o bot√£o "Recusar" do atendente √© seguran√ßa? (dia 9)
 
 ---
 
 ## Ponte com .NET
 
-- **Cookie de Sess„o do ASP.NET Core (`AddAuthentication().AddCookie()`) ò Cookie com flags `HttpOnly` e `SameSite`.** O navegador gerencia e transmite o cookie automaticamente em cada requisiÁ„o; o JavaScript n„o possui acesso de leitura ou escrita a ele.
-- **`[Authorize(Policy = "Supervisor")]` / `RequireAuthorization()` ò Rotas protegidas e botıes condicionais no React.** No frontend, esconder componentes È **apenas experiÍncia de usu·rio (UX)**. A barreira real de autorizaÁ„o È sempre imposta pelo backend.
-- **`HttpContext.User` ò Usu·rio autenticado na UI.** No frontend moderno, os dados do usu·rio conectado s„o **dados do servidor** obtidos via `GET /me` e mantidos em cache com TanStack Query.
+- **Cookie de Sess√£o do ASP.NET Core (`AddAuthentication().AddCookie()`) Àú Cookie com flags `HttpOnly` e `SameSite`.** O navegador gerencia e transmite o cookie automaticamente em cada requisi√ß√£o; o JavaScript n√£o possui acesso de leitura ou escrita a ele.
+- **`[Authorize(Policy = "Supervisor")]` / `RequireAuthorization()` Àú Rotas protegidas e bot√µes condicionais no React.** No frontend, esconder componentes √© **apenas experi√™ncia de usu√°rio (UX)**. A barreira real de autoriza√ß√£o √© sempre imposta pelo backend.
+- **`HttpContext.User` Àú Usu√°rio autenticado na UI.** No frontend moderno, os dados do usu√°rio conectado s√£o **dados do servidor** obtidos via `GET /me` e mantidos em cache com TanStack Query.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta 1:** onde armazenar o estado de autenticaÁ„o e sess„o?
+**Pergunta 1:** onde armazenar o estado de autentica√ß√£o e sess√£o?
 
 | Mecanismo | Funcionamento | Vulnerabilidade Principal | Quando Utilizar |
 |---|---|---|---|
-| **JWT no `localStorage`** | O script lÍ o token do disco e anexa no cabeÁalho `Authorization` | **Vulner·vel a XSS:** qualquer script malicioso ou dependÍncia comprometida rouba o token | Evitar quando vocÍ controla a API |
-| **Token em memÛria** | Token vol·til mantido em closures | Perdido ao pressionar F5; fluxo de refresh complexo | SPAs puras consumindo provedores externos (OIDC / OAuth2) |
-| **Cookie `HttpOnly` + `SameSite`** | Emitido pelo backend na resposta de login | Requer proteÁ„o CSRF (`SameSite=Lax/Strict` e antiforgery em mutaÁıes) | **Padr„o recomendado** quando API e front compartilham a mesma origem |
+| **JWT no `localStorage`** | O script l√™ o token do disco e anexa no cabe√ßalho `Authorization` | **Vulner√°vel a XSS:** qualquer script malicioso ou depend√™ncia comprometida rouba o token | Evitar quando voc√™ controla a API |
+| **Token em mem√≥ria** | Token vol√°til mantido em closures | Perdido ao pressionar F5; fluxo de refresh complexo | SPAs puras consumindo provedores externos (OIDC / OAuth2) |
+| **Cookie `HttpOnly` + `SameSite`** | Emitido pelo backend na resposta de login | Requer prote√ß√£o CSRF (`SameSite=Lax/Strict` e antiforgery em muta√ß√µes) | **Padr√£o recomendado** quando API e front compartilham a mesma origem |
 
-**Pergunta 2:** o que a interface gr·fica N√O consegue proteger?
-- Ocultar botıes ou rotas n„o impede chamadas diretas via API.
-- Vari·veis prefixadas com `VITE_` em arquivos `.env` ficam gravadas em texto plano no bundle final do cliente; segredos de infraestrutura jamais devem ir para o frontend.
-- O React protege contra XSS escapando strings por padr„o no JSX. O perigo real surge ao utilizar `dangerouslySetInnerHTML`.
+**Pergunta 2:** o que a interface gr√°fica N√ÉO consegue proteger?
+- Ocultar bot√µes ou rotas n√£o impede chamadas diretas via API.
+- Vari√°veis prefixadas com `VITE_` em arquivos `.env` ficam gravadas em texto plano no bundle final do cliente; segredos de infraestrutura jamais devem ir para o frontend.
+- O React protege contra XSS escapando strings por padr√£o no JSX. O perigo real surge ao utilizar `dangerouslySetInnerHTML`.
 
 **Pergunta 3:** como tratar 401 versus 403 na interface?
-- **HTTP 401 (N„o Autenticado):** "N„o sei quem vocÍ È". Redirecionar imediatamente para a tela de login.
-- **HTTP 403 (Proibido):** "Sei quem vocÍ È, mas seu perfil n„o tem permiss„o para esta aÁ„o". Exibir mensagem explicativa prÛxima ao bot„o e **manter o usu·rio conectado**.
+- **HTTP 401 (N√£o Autenticado):** "N√£o sei quem voc√™ √©". Redirecionar imediatamente para a tela de login.
+- **HTTP 403 (Proibido):** "Sei quem voc√™ √©, mas seu perfil n√£o tem permiss√£o para esta a√ß√£o". Exibir mensagem explicativa pr√≥xima ao bot√£o e **manter o usu√°rio conectado**.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó AutenticaÁ„o Cookie e PolÌticas de AutorizaÁ„o
+### Backend (`api/`) ‚Äî Autentica√ß√£o Cookie e Pol√≠ticas de Autoriza√ß√£o
 - Em `api/Program.cs`, configurar:
   - `builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.Cookie.HttpOnly = true; options.Cookie.SameSite = SameSiteMode.Lax; options.ExpireTimeSpan = TimeSpan.FromMinutes(30); })`.
   - Mapear endpoints:
-    - `POST /login`: recebe `LoginRequest(usuario)`. Usu·rios de teste: `ana` (claim perfil = `"atendente"`) e `carlos` (claim perfil = `"supervisor"`). Realiza `HttpContext.SignInAsync()`.
-    - `POST /logout`: limpa sess„o com `HttpContext.SignOutAsync()`.
+    - `POST /login`: recebe `LoginRequest(usuario)`. Usu√°rios de teste: `ana` (claim perfil = `"atendente"`) e `carlos` (claim perfil = `"supervisor"`). Realiza `HttpContext.SignInAsync()`.
+    - `POST /logout`: limpa sess√£o com `HttpContext.SignOutAsync()`.
     - `GET /me`: protegido por `RequireAuthorization()`, retorna `UsuarioResponse(Nome, Perfil)`.
   - Aplicar `RequireAuthorization()` nos endpoints `/solicitacoes`.
-  - Exigir perfil de `supervisor` para transicionar o status de uma solicitaÁ„o para `recusada` (retornar `Results.Forbid()` / 403 se for atendente).
+  - Exigir perfil de `supervisor` para transicionar o status de uma solicita√ß√£o para `recusada` (retornar `Results.Forbid()` / 403 se for atendente).
   - Garantir que a API retorne **401/403** (e nunca redirecionamento HTML 302).
+- No mesmo dia o front faz login e monta o RBAC; o proxy de desenvolvimento repassa `/api` para a API **removendo** o prefixo, porque a API ainda responde nas rotas da raiz.
 
-### Frontend (`web/`) ó Proxy, Tela de Login e RBAC
-- **Passo 1 ó Proxy do Vite:** Configurar em `vite.config.ts` o proxy reverso encaminhando requisiÁıes de `/api` para a API .NET, viabilizando o fluxo de cookies na mesma origem (`localhost:5173`).
-- **Passo 2 ó Hook de Sess„o do Servidor:** Criar hook `useUsuario()` consumindo `GET /me` com `useQuery(['me'])`.
-- **Passo 3 ó Tela de Login e Header Din‚mico:** Criar rota `/login` com seleÁ„o de usu·rio (`ana` ou `carlos`). Exibir no header o nome e perfil do usu·rio logado com bot„o de logout.
-- **Passo 4 ó InterceptaÁ„o de 401 e 403:**
-  - Redirecionar globalmente para `/login` quando qualquer requisiÁ„o retornar 401.
+### Frontend (`web/`) ‚Äî Proxy, Tela de Login e RBAC
+- **Passo 1 ‚Äî Proxy do Vite:** Configurar em `vite.config.ts` o proxy reverso encaminhando requisi√ß√µes de `/api` para a API .NET, viabilizando o fluxo de cookies na mesma origem (`localhost:5173`).
+- **Passo 2 ‚Äî Hook de Sess√£o do Servidor:** Criar hook `useUsuario()` consumindo `GET /me` com `useQuery(['me'])`.
+- **Passo 3 ‚Äî Tela de Login e Header Din√¢mico:** Criar rota `/login` com sele√ß√£o de usu√°rio (`ana` ou `carlos`). Exibir no header o nome e perfil do usu√°rio logado com bot√£o de logout.
+- **Passo 4 ‚Äî Intercepta√ß√£o de 401 e 403:**
+  - Redirecionar globalmente para `/login` quando qualquer requisi√ß√£o retornar 401.
   - Exibir alerta contextual caso um atendente tente recusar um chamado recebendo 403.
-- **Passo 5 ó Teste de ResistÍncia a XSS:** Cadastrar chamado contendo payload malicioso `<img src=x onerror=alert(1)>` e constatar que o React neutraliza a execuÁ„o de scripts.
-- **Passo 6 ó ADR 12:** Registrar em `decisoes/12-autenticacao.md` a decis„o por Cookies `HttpOnly`, a divis„o 401 vs 403 e os limites de seguranÁa do cliente.
+- **Passo 5 ‚Äî Teste de Resist√™ncia a XSS:** Cadastrar chamado contendo payload malicioso `<img src=x onerror=alert(1)>` e constatar que o React neutraliza a execu√ß√£o de scripts.
+- **Passo 6 ‚Äî ADR 12:** Registrar em `decisoes/12-autenticacao.md` a decis√£o por Cookies `HttpOnly`, a divis√£o 401 vs 403 e os limites de seguran√ßa do cliente.
 
-### ReferÍncias TÈcnicas
+### Refer√™ncias T√©cnicas
 - MDN HTTP Cookies: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies
 - Cookie Authentication no ASP.NET Core: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie
 - OWASP Session Management Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
@@ -78,44 +79,44 @@
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O endpoint `POST /login` emite um cookie de autenticaÁ„o com as flags `HttpOnly` e `SameSite=Lax`.
+- [ ] **CA 1 (BE):** O endpoint `POST /login` emite um cookie de autentica√ß√£o com as flags `HttpOnly` e `SameSite=Lax`.
 - [ ] **CA 2 (BE):** Chamadas sem cookie respondem estritamente 401 (sem redirect 302) e tentativas de recusa por atendente respondem 403.
-- [ ] **CA 3 (FE):** A aplicaÁ„o utiliza o proxy `/api` do Vite, enviando e recebendo cookies sem necessidade de CORS complexo no browser.
-- [ ] **CA 4 (FE):** O cabeÁalho da aplicaÁ„o exibe o nome e perfil do usu·rio autenticado obtido do endpoint `/me`.
-- [ ] **CA 5 (FE):** Ao receber um 401, a aplicaÁ„o redireciona automaticamente para a rota `/login`.
-- [ ] **CA 6 (FE):** Ao tentar recusar um chamado com o perfil atendente, a aÁ„o responde 403 e a tela exibe um aviso claro de restriÁ„o sem deslogar o usu·rio.
-- [ ] **CA 7 (FE):** A inserÁ„o de tags HTML/scripts em observaÁıes È renderizada como texto inofensivo sem disparar alertas no navegador.
-- [ ] **CA 8 (ADR):** O arquivo `decisoes/12-autenticacao.md` est· formalizado detalhando a seguranÁa da sess„o.
+- [ ] **CA 3 (FE):** A aplica√ß√£o utiliza o proxy `/api` do Vite, enviando e recebendo cookies sem necessidade de CORS complexo no browser.
+- [ ] **CA 4 (FE):** O cabe√ßalho da aplica√ß√£o exibe o nome e perfil do usu√°rio autenticado obtido do endpoint `/me`.
+- [ ] **CA 5 (FE):** Ao receber um 401, a aplica√ß√£o redireciona automaticamente para a rota `/login`.
+- [ ] **CA 6 (FE):** Ao tentar recusar um chamado com o perfil atendente, a a√ß√£o responde 403 e a tela exibe um aviso claro de restri√ß√£o sem deslogar o usu√°rio.
+- [ ] **CA 7 (FE):** A inser√ß√£o de tags HTML/scripts em observa√ß√µes √© renderizada como texto inofensivo sem disparar alertas no navegador.
+- [ ] **CA 8 (ADR):** O arquivo `decisoes/12-autenticacao.md` est√° formalizado detalhando a seguran√ßa da sess√£o.
 
 ---
 
 ## Armadilhas Comuns
 
-- **Armazenar tokens em `localStorage`:** ExposiÁ„o crÌtica a ataques de roubo de credenciais via XSS.
-- **API respondendo com redirect 302:** O comportamento padr„o do MVC antigo de redirecionar para `/Account/Login` quebra SPAs; a API deve responder status 401 puro.
-- **Achar que esconder bot„o È proteÁ„o:** Qualquer usu·rio pode abrir o DevTools e invocar o endpoint restrito; a validaÁ„o de perfil deve ocorrer no C#.
+- **Armazenar tokens em `localStorage`:** Exposi√ß√£o cr√≠tica a ataques de roubo de credenciais via XSS.
+- **API respondendo com redirect 302:** O comportamento padr√£o do MVC antigo de redirecionar para `/Account/Login` quebra SPAs; a API deve responder status 401 puro.
+- **Achar que esconder bot√£o √© prote√ß√£o:** Qualquer usu√°rio pode abrir o DevTools e invocar o endpoint restrito; a valida√ß√£o de perfil deve ocorrer no C#.
 
 ---
 
 ## Prompts Prontos
 
-- "Compare cookie httpOnly e token no localStorage para uma SPA com back .NET prÛprio: riscos, mitigaÁ„o e quando cada um faz sentido."
+- "Compare cookie httpOnly e token no localStorage para uma SPA com back .NET pr√≥prio: riscos, mitiga√ß√£o e quando cada um faz sentido."
 
 ---
 
 ## Pronto quando
 
-- [ ] Login e logout funcionam, e o usu·rio vem de `/me` via `useQuery`.
+- [ ] Login e logout funcionam, e o usu√°rio vem de `/me` via `useQuery`.
 - [ ] Um 401 leva para o login e um 403 mostra uma mensagem, sem deslogar.
-- [ ] VocÍ provou que o back recusa uma aÁ„o sem permiss„o mesmo com o bot„o visÌvel, e que o texto com `<img onerror>` n„o executa.
-- [ ] O ADR `decisoes/12-autenticacao.md` est· registrado.
+- [ ] Voc√™ provou que o back recusa uma a√ß√£o sem permiss√£o mesmo com o bot√£o vis√≠vel, e que o texto com `<img onerror>` n√£o executa.
+- [ ] O ADR `decisoes/12-autenticacao.md` est√° registrado.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-12.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-12): autenticaÁ„o por cookie"`.
-3. PrÛximo: [Dia 13 ó Testes e organizaÁ„o](us-13-testes-integracao-msw.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-12): autentica√ß√£o por cookie"`.
+3. Pr√≥ximo: [Dia 13 ‚Äî Testes e organiza√ß√£o](us-13-testes-integracao-msw.md).

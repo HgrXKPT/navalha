@@ -1,70 +1,74 @@
-# US-13 (Dia 13) — Suíte de Testes Automatizados na Borda HTTP com MSW
+# US-13 (Dia 13) â€” SuÃ­te de Testes Automatizados na Borda HTTP com MSW
 
-> **Fase 4: qualidade de produção** · ? 1h essencial / 2h com extras · Pré-requisito: Dia 12
+> **Fase 4: qualidade de produÃ§Ã£o** Â· ? 1h essencial / 2h com extras Â· PrÃ©-requisito: Dia 12
 
-## História de Usuário
+## HistÃ³ria de UsuÃ¡rio
 
-**Como** desenvolvedor responsável pela sustentabilidade do projeto,  
-**quero** cobrir os fluxos críticos da tela com testes automatizados de integração simulando a borda de rede HTTP sem acoplamento a detalhes de implementação interna,  
-**para** refatorar componentes e hooks com confiança de que a experiência do usuário e os tratamentos de erro permanecem íntegros.
+**Como** desenvolvedor responsÃ¡vel pela sustentabilidade do projeto,  
+**quero** cobrir os fluxos crÃ­ticos da tela com testes automatizados de integraÃ§Ã£o simulando a borda de rede HTTP sem acoplamento a detalhes de implementaÃ§Ã£o interna,  
+**para** refatorar componentes e hooks com confianÃ§a de que a experiÃªncia do usuÃ¡rio e os tratamentos de erro permanecem Ã­ntegros.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. Onde a sessão do painel está guardada, e por quê? (dia 12)
-2. Qual é a diferença entre 401 e 403 na tela? (dia 12)
-3. Por que o usuário logado é dado do servidor? (dia 12)
+1. Onde a sessÃ£o do painel estÃ¡ guardada, e por quÃª? (dia 12)
+2. Qual Ã© a diferenÃ§a entre 401 e 403 na tela? (dia 12)
+3. Por que o usuÃ¡rio logado Ã© dado do servidor? (dia 12)
 
 ---
 
 ## Ponte com .NET
 
-- **Vitest ˜ xUnit / NUnit**, e **`vi.fn()` ˜ NSubstitute / Moq**.
-- **React Testing Library (RTL) ˜ Testes orientados à interface pública.** Em C# você testa métodos e contratos públicos sem inspecionar campos privados. Em RTL, você nunca testa o `useState` ou a estrutura interna do DOM; você testa **o que o usuário enxerga e faz** (textos, botões, acessibilidade via roles).
-- **MSW (Mock Service Worker) ˜ um `DelegatingHandler` / `HttpMessageHandler` falso.** O seu código emite chamadas HTTP reais via `fetch` e o MSW intercepta na camada de rede retornando respostas simuladas. Você faz mock na **fronteira de rede**, e não nos seus próprios componentes.
+- **Vitest Ëœ xUnit / NUnit**, e **`vi.fn()` Ëœ NSubstitute / Moq**.
+- **React Testing Library (RTL) Ëœ Testes orientados Ã  interface pÃºblica.** Em C# vocÃª testa mÃ©todos e contratos pÃºblicos sem inspecionar campos privados. Em RTL, vocÃª nunca testa o `useState` ou a estrutura interna do DOM; vocÃª testa **o que o usuÃ¡rio enxerga e faz** (textos, botÃµes, acessibilidade via roles).
+- **MSW (Mock Service Worker) Ëœ um `DelegatingHandler` / `HttpMessageHandler` falso.** O seu cÃ³digo emite chamadas HTTP reais via `fetch` e o MSW intercepta na camada de rede retornando respostas simuladas. VocÃª faz mock na **fronteira de rede**, e nÃ£o nos seus prÃ³prios componentes.
 
 ---
 
-## Decisão Arquitetural do Dia
+## DecisÃ£o Arquitetural do Dia
 
-**Pergunta:** o que testar e em qual nível da pirâmide de testes de frontend?
+**Pergunta:** o que testar e em qual nÃ­vel da pirÃ¢mide de testes de frontend?
 
-| Nível | Ferramenta | O que cobre no painel | Proporção / Foco |
+| NÃ­vel | Ferramenta | O que cobre no painel | ProporÃ§Ã£o / Foco |
 |---|---|---|---|
-| **Unitário** (lógica pura) | Vitest puro | Funções utilitárias puras: formatação monetária, conversão de `ValidationProblem` para formulário | Poucos, rápidos e focados em regras matemáticas ou de parse |
-| **Integração de Tela** | Vitest + RTL + MSW | Fluxos completos: renderização da lista com dados reais/vazio/500, validação do formulário e recusas 409 | **A grande maioria da suíte**. Alta fidelidade à experiência real e alta resiliência a refactors |
-| **Ponta a Ponta (E2E)** | Playwright | Fluxo crítico completo: Login ? Abertura de chamado ? Visualização na lista | Poucos (1 a 2 testes), mais lentos, focados em smoke test de produção |
+| **UnitÃ¡rio** (lÃ³gica pura) | Vitest puro | FunÃ§Ãµes utilitÃ¡rias puras: formataÃ§Ã£o monetÃ¡ria, conversÃ£o de `ValidationProblem` para formulÃ¡rio | Poucos, rÃ¡pidos e focados em regras matemÃ¡ticas ou de parse |
+| **IntegraÃ§Ã£o de Tela** | Vitest + RTL + MSW | Fluxos completos: renderizaÃ§Ã£o da lista com dados reais/vazio/500, validaÃ§Ã£o do formulÃ¡rio e recusas 409 | **A grande maioria da suÃ­te**. Alta fidelidade Ã  experiÃªncia real e alta resiliÃªncia a refactors |
+| **Ponta a Ponta (E2E)** | Playwright | Fluxo crÃ­tico completo: Login ? Abertura de chamado ? VisualizaÃ§Ã£o na lista | Poucos (1 a 2 testes), mais lentos, focados em smoke test de produÃ§Ã£o |
 
-**O que NÃO deve ser testado:**
-- Detalhes de implementação interna (nomes de variáveis de estado, métodos internos de hooks).
-- O funcionamento de bibliotecas consolidadas (não teste se o TanStack Query faz cache ou se o Zod valida strings).
-- Estilização pura ou valores de CSS específicos.
+**O que NÃƒO deve ser testado:**
+- Detalhes de implementaÃ§Ã£o interna (nomes de variÃ¡veis de estado, mÃ©todos internos de hooks).
+- O funcionamento de bibliotecas consolidadas (nÃ£o teste se o TanStack Query faz cache ou se o Zod valida strings).
+- EstilizaÃ§Ã£o pura ou valores de CSS especÃ­ficos.
 
-**Recomendação:** concentre a maior parte dos testes na **integração de tela com MSW**. Registre as fronteiras no ADR do dia.
+**RecomendaÃ§Ã£o:** concentre a maior parte dos testes na **integraÃ§Ã£o de tela com MSW**. Registre as fronteiras no ADR do dia.
 
 ---
 
-## Especificação de Entrega (Backlog Técnico)
+## EspecificaÃ§Ã£o de Entrega (Backlog TÃ©cnico)
 
-### Backend (`api/`) — Alinhamento de Contratos de Teste
-- Revisar se os contratos de resposta simulados no MSW no frontend espelham com total fidelidade os schemas produzidos pelos endpoints reais da `api/` (incluindo campos camelCase e enums snake_case).
+### Backend (`api/`) â€” ReferÃªncia de Contratos para o MSW (sem mudanÃ§a na API)
+- Nenhuma alteraÃ§Ã£o na API no dia 13: os schemas produzidos pelos endpoints reais sÃ£o a referÃªncia para os handlers do MSW.
+- Revisar se os contratos simulados no frontend espelham com total fidelidade os schemas da `api/` (campos em camelCase e enums em snake_case).
+- Material de apoio jÃ¡ existente no repo para a suÃ­te de integraÃ§Ã£o: `web/e2e/support/axe.ts` (assertivas de acessibilidade) e `web/e2e/support/viewports.ts` (viewports compartilhados).
 
-### Frontend (`web/`) — Suíte de Testes com RTL e MSW
-- **Passo 1 — Setup de Testes:** Instalar `vitest`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` e `msw`. Configurar o bloco `test` no `vite.config.ts` e adicionar o script `"test": "vitest"` no `package.json`.
-- **Passo 2 — Teste Unitário Puro:** Criar `src/api/erros.test.ts` testando a função utilitária de conversão de dicionário `errors` do backend para campos do formulário.
-- **Passo 3 — Teste de Integração da Lista com MSW:** Criar `src/componentes/ListaSolicitacoes.test.tsx` cobrindo 3 cenários com MSW:
+### Frontend (`web/`) â€” SuÃ­te de Testes com RTL e MSW
+- **Passo 1 â€” Setup de Testes:** Instalar `vitest`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` e `msw`. Configurar o bloco `test` no `vite.config.ts` e adicionar o script `"test": "vitest"` no `package.json`.
+- **Passo 2 â€” Teste UnitÃ¡rio Puro:** Criar `src/api/erros.test.ts` testando a funÃ§Ã£o utilitÃ¡ria de conversÃ£o de dicionÃ¡rio `errors` do backend para campos do formulÃ¡rio.
+- **Passo 3 â€” Teste de IntegraÃ§Ã£o da Lista com MSW:** Criar `src/componentes/ListaSolicitacoes.test.tsx` cobrindo 3 cenÃ¡rios com MSW:
   1. Sucesso com itens na lista;
-  2. Sucesso com lista vazia (exibição de estado vazio amigável);
-  3. Falha HTTP 500 (exibição do card de erro com opção de retry).
-  *Instanciar um `new QueryClient({ defaultOptions: { queries: { retry: false } } })` por teste para evitar contaminação de cache.*
-- **Passo 4 — Teste de Integração de Formulário:** Criar `src/paginas/NovaSolicitacao.test.tsx` com `user-event` validando:
-  1. Erros de validação do Zod impedindo o disparo da requisição;
-  2. Resposta de erro 409 da API sendo exibida no topo do formulário.
-- **Passo 5 — Execução Integrada:** Garantir que `npx vitest run`, `npm run lint` e `npm run build` passem 100% verdes.
-- **Passo 6 — ADR 13:** Registrar em `decisoes/13-estrategia-de-testes.md` os níveis adotados e o que se decidiu não testar.
+  2. Sucesso com lista vazia (exibiÃ§Ã£o de estado vazio amigÃ¡vel);
+  3. Falha HTTP 500 (exibiÃ§Ã£o do card de erro com opÃ§Ã£o de retry).
+  *Instanciar um `new QueryClient({ defaultOptions: { queries: { retry: false } } })` por teste para evitar contaminaÃ§Ã£o de cache.*
+- **Passo 4 â€” Teste de IntegraÃ§Ã£o de FormulÃ¡rio:** Criar `src/paginas/NovaSolicitacao.test.tsx` com `user-event` validando:
+  1. Erros de validaÃ§Ã£o do Zod impedindo o disparo da requisiÃ§Ã£o;
+  2. Resposta de erro 409 da API sendo exibida no topo do formulÃ¡rio.
+- **Passo 5 â€” ExecuÃ§Ã£o Integrada:** Garantir que `npx vitest run`, `npm run lint` e `npm run build` passem 100% verdes.
+- **Passo 6 â€” ADR 13:** Registrar em `decisoes/13-estrategia-de-testes.md` os nÃ­veis adotados e o que se decidiu nÃ£o testar.
 
-### Referências Técnicas
+- **Passo 7 â€” E2E e Acessibilidade (material jÃ¡ existente no repo):** reusar `web/e2e/support/axe.ts` (assertivas de acessibilidade) e `web/e2e/support/viewports.ts` (viewports compartilhados) como base dos testes de ponta a ponta, e reaproveitar `web/tools/shots.spec.ts` para a captura de telas de regressÃ£o visual nos breakpoints definidos.
+
+### ReferÃªncias TÃ©cnicas
 - Vitest Getting Started: https://vitest.dev/guide/
 - React Testing Library Intro: https://testing-library.com/docs/react-testing-library/intro/
 - Guia de Prioridade de Queries da RTL: https://testing-library.com/docs/queries/about/#priority
@@ -73,42 +77,42 @@
 
 ---
 
-## Critérios de Aceite (CA)
+## CritÃ©rios de Aceite (CA)
 
-- [ ] **CA 1 (FE):** O comando `npx vitest run` executa com sucesso todos os testes unitários e de integração.
-- [ ] **CA 2 (FE):** Os testes de tela utilizam queries prioritárias baseadas em acessibilidade (`getByRole`, `findByRole`) em vez de seletores frágeis por classe ou testId.
-- [ ] **CA 3 (FE):** O MSW intercepta requisições HTTP sem que seja necessário mockar internamente os hooks de API.
-- [ ] **CA 4 (FE):** Cada teste com TanStack Query possui sua própria instância isolada de `QueryClient` com `retry: false`, eliminando interferências entre testes.
+- [ ] **CA 1 (FE):** O comando `npx vitest run` executa com sucesso todos os testes unitÃ¡rios e de integraÃ§Ã£o.
+- [ ] **CA 2 (FE):** Os testes de tela utilizam queries prioritÃ¡rias baseadas em acessibilidade (`getByRole`, `findByRole`) em vez de seletores frÃ¡geis por classe ou testId.
+- [ ] **CA 3 (FE):** O MSW intercepta requisiÃ§Ãµes HTTP sem que seja necessÃ¡rio mockar internamente os hooks de API.
+- [ ] **CA 4 (FE):** Cada teste com TanStack Query possui sua prÃ³pria instÃ¢ncia isolada de `QueryClient` com `retry: false`, eliminando interferÃªncias entre testes.
 - [ ] **CA 5 (FE):** `npm run lint` e `npm run build` continuam passando sem erros ou warnings.
-- [ ] **CA 6 (ADR):** O arquivo `decisoes/13-estrategia-de-testes.md` está formalizado detalhando o escopo dos testes.
+- [ ] **CA 6 (ADR):** O arquivo `decisoes/13-estrategia-de-testes.md` estÃ¡ formalizado detalhando o escopo dos testes.
 
 ---
 
 ## Armadilhas Comuns
 
-- **Abuso de `getByTestId`:** Priorize sempre `getByRole('button', { name: /salvar/i })`, que valida se o elemento é acessível para tecnologias assistivas.
-- **Mockar hooks próprios (`vi.mock('./useSolicitacoes')`):** Testa menos do que parece e quebra com qualquer refactor interno do componente. Prefira MSW na camada de rede.
-- **`getBy*` vs. `findBy*`:** Elementos assíncronos que surgem após a resolução de Promises exigem o uso de `await screen.findBy*`.
+- **Abuso de `getByTestId`:** Priorize sempre `getByRole('button', { name: /salvar/i })`, que valida se o elemento Ã© acessÃ­vel para tecnologias assistivas.
+- **Mockar hooks prÃ³prios (`vi.mock('./useSolicitacoes')`):** Testa menos do que parece e quebra com qualquer refactor interno do componente. Prefira MSW na camada de rede.
+- **`getBy*` vs. `findBy*`:** Elementos assÃ­ncronos que surgem apÃ³s a resoluÃ§Ã£o de Promises exigem o uso de `await screen.findBy*`.
 
 ---
 
 ## Prompts Prontos
 
-- "Revise meus testes: estou testando comportamento ou implementação? Aponte o critério, sem reescrever."
-- "Para este componente <cole>, em que nível você testaria e por quê? Não escreva o teste."
+- "Revise meus testes: estou testando comportamento ou implementaÃ§Ã£o? Aponte o critÃ©rio, sem reescrever."
+- "Para este componente <cole>, em que nÃ­vel vocÃª testaria e por quÃª? NÃ£o escreva o teste."
 
 ---
 
 ## Pronto quando
 
-- [ ] O `npx vitest run` passa, com pelo menos 1 teste unitário e 2 de integração com MSW.
+- [ ] O `npx vitest run` passa, com pelo menos 1 teste unitÃ¡rio e 2 de integraÃ§Ã£o com MSW.
 - [ ] `npm run lint` e `npm run build` passam.
-- [ ] O ADR `decisoes/13-estrategia-de-testes.md` está registrado.
+- [ ] O ADR `decisoes/13-estrategia-de-testes.md` estÃ¡ registrado.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-13.md` a partir do [modelo](../diario/_modelo.md).
-2. Faça o commit: `git add . && git commit -m "test(dia-13): testes de integração com msw"`.
-3. Próximo: [Dia 14 — Concorrência: dois usuários, mesma solicitação](us-14-concorrencia-otimista-etag.md).
+2. FaÃ§a o commit: `git add . && git commit -m "test(dia-13): testes de integraÃ§Ã£o com msw"`.
+3. PrÃ³ximo: [Dia 14 â€” ConcorrÃªncia: dois usuÃ¡rios, mesma solicitaÃ§Ã£o](us-14-concorrencia-otimista-etag.md).

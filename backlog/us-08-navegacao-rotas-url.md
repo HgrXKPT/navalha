@@ -1,66 +1,67 @@
-# US-08 (Dia 08) ó NavegaÁ„o Multi-telas e Deep Linking via URL
+# US-08 (Dia 08) ‚Äî Navega√ß√£o Multi-telas e Deep Linking via URL
 
-> **Fase 3: fronteira com o back** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 07
+> **Fase 3: fronteira com o back** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 07
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
 **Como** atendente de suporte,  
-**quero** navegar entre telas distintas (listagem com filtros, detalhe do chamado e placeholder de novo cadastro) com URLs amig·veis e compartilh·veis,  
-**para** poder favoritar links diretos para chamados especÌficos, recarregar a p·gina (F5) sem perder os filtros aplicados e usar os botıes de voltar e avanÁar do navegador.
+**quero** navegar entre telas distintas (listagem com filtros, detalhe do chamado e placeholder de novo cadastro) com URLs amig√°veis e compartilh√°veis,  
+**para** poder favoritar links diretos para chamados espec√≠ficos, recarregar a p√°gina (F5) sem perder os filtros aplicados e usar os bot√µes de voltar e avan√ßar do navegador.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. Por que filtro e p·gina precisam estar na query key? (dia 7)
-2. Quando filtrar no cliente È aceit·vel? (dia 7)
+1. Por que filtro e p√°gina precisam estar na query key? (dia 7)
+2. Quando filtrar no cliente √© aceit√°vel? (dia 7)
 3. O que o `invalidateQueries` faz? (dia 7)
 
 ---
 
 ## Ponte com .NET
 
-- **Rotas declarativas lembram o roteamento de Minimal APIs (`MapGet("/solicitacoes/{id}")`)**, com a diferenÁa de que na SPA quem resolve as telas È o roteador JavaScript no navegador.
-- **Query String no front ò `[FromQuery]` no controller/endpoint**, sÛ que no frontend ela atua como **estado persistente de tela**, n„o apenas par‚metro de transporte de uma requisiÁ„o.
-- **Onde quebra:** Em SPA, o servidor web entrega o mesmo `index.html` est·tico para qualquer rota acessada. Em produÁ„o, se o servidor n„o tiver configuraÁ„o de fallback para o `index.html`, o acesso direto a uma URL profunda (ex.: `/solicitacoes/12`) responde 404 no servidor.
+- **Rotas declarativas lembram o roteamento de Minimal APIs (`MapGet("/solicitacoes/{id}")`)**, com a diferen√ßa de que na SPA quem resolve as telas √© o roteador JavaScript no navegador.
+- **Query String no front Àú `[FromQuery]` no controller/endpoint**, s√≥ que no frontend ela atua como **estado persistente de tela**, n√£o apenas par√¢metro de transporte de uma requisi√ß√£o.
+- **Onde quebra:** Em SPA, o servidor web entrega o mesmo `index.html` est√°tico para qualquer rota acessada. Em produ√ß√£o, se o servidor n√£o tiver configura√ß√£o de fallback para o `index.html`, o acesso direto a uma URL profunda (ex.: `/solicitacoes/12`) responde 404 no servidor.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta:** quais dados devem ir para a URL e quais devem permanecer em memÛria interna?
+**Pergunta:** quais dados devem ir para a URL e quais devem permanecer em mem√≥ria interna?
 
-| O que DEVE ir para a URL | O que N√O DEVE ir para a URL |
+| O que DEVE ir para a URL | O que N√ÉO DEVE ir para a URL |
 |---|---|
-| Identificador de rota e recurso (`/solicitacoes/42`) | Estados efÍmeros de animaÁ„o ou interaÁ„o (hover, dropdown aberto) |
-| Filtros de listagem, termos de busca, ordenaÁ„o e p·gina ativa | Dados confidenciais ou sensÌveis (senhas, CPFs, tokens JWT) |
-| Aba visual ativa que o usu·rio espera manter ao retornar | Dados volumosos em si (a lista inteira; na URL vai sÛ o ponteiro de busca) |
-| Par‚metros de contexto que viabilizam link compartilh·vel | Rascunhos inacabados de formul·rios complexos |
+| Identificador de rota e recurso (`/solicitacoes/42`) | Estados ef√™meros de anima√ß√£o ou intera√ß√£o (hover, dropdown aberto) |
+| Filtros de listagem, termos de busca, ordena√ß√£o e p√°gina ativa | Dados confidenciais ou sens√≠veis (senhas, CPFs, tokens JWT) |
+| Aba visual ativa que o usu√°rio espera manter ao retornar | Dados volumosos em si (a lista inteira; na URL vai s√≥ o ponteiro de busca) |
+| Par√¢metros de contexto que viabilizam link compartilh√°vel | Rascunhos inacabados de formul√°rios complexos |
 
-**CritÈrio de decis„o:** *"Se o usu·rio copiar o link e colar em outra aba ou pressionar F5, ele espera ver exatamente o mesmo recorte de tela?"* Se sim, o estado pertence ‡ URL.
+**Crit√©rio de decis√£o:** *"Se o usu√°rio copiar o link e colar em outra aba ou pressionar F5, ele espera ver exatamente o mesmo recorte de tela?"* Se sim, o estado pertence √† URL.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Suporte e Toler‚ncia a Par‚metros Inv·lidos
-- Em `api/Program.cs`, garantir que o endpoint `GET /solicitacoes/{id:int}` retorne `Results.NotFound()` quando o id n„o for encontrado.
-- Tratar par‚metros de query inv·lidos em `GET /solicitacoes` (ex.: `pagina=0` ou valores n„o numÈricos) caindo com seguranÁa para a primeira p·gina sem disparar 500.
+### Backend (`api/`) ‚Äî Suporte e Toler√¢ncia a Par√¢metros Inv√°lidos
+- Em `api/Program.cs`, garantir que o endpoint `GET /solicitacoes/{id:int}` retorne `Results.NotFound()` quando o id n√£o for encontrado.
+- Tratar par√¢metros de query inv√°lidos em `GET /solicitacoes` (ex.: `pagina=0` ou valores n√£o num√©ricos) caindo com seguran√ßa para a primeira p√°gina sem disparar 500.
+- O front do dia 08 adota o React Router: a rota da listagem l√™ os par√¢metros da URL e repete a consulta √† API.
 
-### Frontend (`web/`) ó Roteamento com React Router
-- **Passo 1 ó ConfiguraÁ„o do Roteador:** Instalar `react-router` e envolver a aplicaÁ„o no `BrowserRouter` no `main.tsx`.
-- **Passo 2 ó Rotas e Layout:** Configurar as rotas:
+### Frontend (`web/`) ‚Äî Roteamento com React Router
+- **Passo 1 ‚Äî Configura√ß√£o do Roteador:** Instalar `react-router` e envolver a aplica√ß√£o no `BrowserRouter` no `main.tsx`.
+- **Passo 2 ‚Äî Rotas e Layout:** Configurar as rotas:
   - `/solicitacoes`: listagem principal;
   - `/solicitacoes/:id`: tela de detalhes;
-  - `/solicitacoes/nova`: placeholder para a criaÁ„o de chamada;
+  - `/solicitacoes/nova`: placeholder para a cria√ß√£o de chamada;
   - `/`: redirecionamento declarativo para `/solicitacoes`;
-  - `*`: rota de captura para p·gina "N„o Encontrado".
+  - `*`: rota de captura para p√°gina "N√£o Encontrado".
   - Criar um Layout base contendo header fixo e `<Outlet />` para renderizar as telas filhas.
-- **Passo 3 ó Detalhe Conectado ao `:id`:** Fazer o componente de detalhe ler o par‚metro da rota via `useParams` e buscar os dados da API usando `useQuery(['solicitacao', id])`, tratando respostas 404 com mensagem amig·vel.
-- **Passo 4 ó URL como Estado Prim·rio:** Substituir o `useState` de filtro, busca e p·gina por `useSearchParams`. As chaves do TanStack Query devem consumir diretamente os valores extraÌdos da URL.
-- **Passo 5 ó Links de NavegaÁ„o:** Substituir tags `<a href>` por componentes `<Link to="...">` e `<NavLink>` para navegaÁ„o SPA sem recarregar a p·gina inteira.
+- **Passo 3 ‚Äî Detalhe Conectado ao `:id`:** Fazer o componente de detalhe ler o par√¢metro da rota via `useParams` e buscar os dados da API usando `useQuery(['solicitacao', id])`, tratando respostas 404 com mensagem amig√°vel.
+- **Passo 4 ‚Äî URL como Estado Prim√°rio:** Substituir o `useState` de filtro, busca e p√°gina por `useSearchParams`. As chaves do TanStack Query devem consumir diretamente os valores extra√≠dos da URL.
+- **Passo 5 ‚Äî Links de Navega√ß√£o:** Substituir tags `<a href>` por componentes `<Link to="...">` e `<NavLink>` para navega√ß√£o SPA sem recarregar a p√°gina inteira.
 
-### ReferÍncias TÈcnicas
+### Refer√™ncias T√©cnicas
 - React Router Declarative Installation: https://reactrouter.com/start/declarative/installation
 - Routing and Layouts: https://reactrouter.com/start/declarative/routing
 - URL Values (useParams, useSearchParams): https://reactrouter.com/start/declarative/url-values
@@ -68,42 +69,42 @@
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O backend responde 404 padronizado para IDs inexistentes e normaliza par‚metros anÙmalos de query string.
-- [ ] **CA 2 (FE):** A navegaÁ„o entre lista e detalhes ocorre instantaneamente via `<Link>`, sem recarregamento completo da p·gina (sem F5).
-- [ ] **CA 3 (FE):** Ao aplicar filtros e navegar para a p·gina 2, o recarregamento manual (F5) mantÈm os filtros e a p·gina selecionada intactos.
-- [ ] **CA 4 (FE):** Copiar a URL com filtros e abri-la em uma nova janela carrega exatamente a mesma visualizaÁ„o de chamados.
-- [ ] **CA 5 (FE):** Acesso a rotas com id inexistente (`/solicitacoes/99999`) ou par‚metros malformados exibe mensagem de recurso n„o encontrado com bot„o de retorno, sem estourar exceÁıes na tela.
+- [ ] **CA 1 (BE):** O backend responde 404 padronizado para IDs inexistentes e normaliza par√¢metros an√¥malos de query string.
+- [ ] **CA 2 (FE):** A navega√ß√£o entre lista e detalhes ocorre instantaneamente via `<Link>`, sem recarregamento completo da p√°gina (sem F5).
+- [ ] **CA 3 (FE):** Ao aplicar filtros e navegar para a p√°gina 2, o recarregamento manual (F5) mant√©m os filtros e a p√°gina selecionada intactos.
+- [ ] **CA 4 (FE):** Copiar a URL com filtros e abri-la em uma nova janela carrega exatamente a mesma visualiza√ß√£o de chamados.
+- [ ] **CA 5 (FE):** Acesso a rotas com id inexistente (`/solicitacoes/99999`) ou par√¢metros malformados exibe mensagem de recurso n√£o encontrado com bot√£o de retorno, sem estourar exce√ß√µes na tela.
 
 ---
 
 ## Armadilhas Comuns
 
-- **Par‚metros da URL s„o strings:** `useParams` e `useSearchParams` sempre retornam strings. Converta para n˙mero (`Number(id)`) e trate cen·rios onde o resultado È `NaN`.
-- **Tags `<a href>` comuns:** Usar `<a>` provoca uma requisiÁ„o HTTP completa para o servidor, destruindo todo o cache em memÛria do TanStack Query. Utilize sempre `<Link to>`.
-- **ImportaÁ„o incorreta de pacotes:** Na vers„o moderna unificada, instale e importe diretamente de `react-router` (evite imports do legado `react-router-dom`).
+- **Par√¢metros da URL s√£o strings:** `useParams` e `useSearchParams` sempre retornam strings. Converta para n√∫mero (`Number(id)`) e trate cen√°rios onde o resultado √© `NaN`.
+- **Tags `<a href>` comuns:** Usar `<a>` provoca uma requisi√ß√£o HTTP completa para o servidor, destruindo todo o cache em mem√≥ria do TanStack Query. Utilize sempre `<Link to>`.
+- **Importa√ß√£o incorreta de pacotes:** Na vers√£o moderna unificada, instale e importe diretamente de `react-router` (evite imports do legado `react-router-dom`).
 
 ---
 
 ## Prompts Prontos
 
-- "Explique como uma SPA resolve rotas no navegador e por que o servidor precisa de fallback para index.html em produÁ„o."
-- "Estou pensando em colocar <X> na URL. Me faÁa as perguntas do critÈrio para eu decidir."
+- "Explique como uma SPA resolve rotas no navegador e por que o servidor precisa de fallback para index.html em produ√ß√£o."
+- "Estou pensando em colocar <X> na URL. Me fa√ßa as perguntas do crit√©rio para eu decidir."
 
 ---
 
 ## Pronto quando
 
-- [ ] As 3 telas funcionam pela URL, e o F5 e o bot„o voltar funcionam em todas.
-- [ ] O F5 mantÈm filtro, busca e p·gina, e um link copiado abre a mesma lista.
-- [ ] Um id inexistente e uma query string inv·lida n„o quebram a tela.
-- [ ] VocÍ explica o que vai e o que n„o vai para a URL, e por que um CPF n„o vai.
+- [ ] As 3 telas funcionam pela URL, e o F5 e o bot√£o voltar funcionam em todas.
+- [ ] O F5 mant√©m filtro, busca e p√°gina, e um link copiado abre a mesma lista.
+- [ ] Um id inexistente e uma query string inv√°lida n√£o quebram a tela.
+- [ ] Voc√™ explica o que vai e o que n√£o vai para a URL, e por que um CPF n√£o vai.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-08.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-08): rotas e filtros na url"`.
-3. PrÛximo: [Dia 09 ó ValidaÁ„o: front vs. back](us-09-abertura-chamado-validacao.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-08): rotas e filtros na url"`.
+3. Pr√≥ximo: [Dia 09 ‚Äî Valida√ß√£o: front vs. back](us-09-abertura-chamado-validacao.md).

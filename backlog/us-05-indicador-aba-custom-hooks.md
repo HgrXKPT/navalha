@@ -1,18 +1,18 @@
-# US-05 (Dia 05) ó Indicador de PendÍncias na Aba, Busca e Custom Hooks
+# US-05 (Dia 05) ‚Äî Indicador de Pend√™ncias na Aba, Busca e Custom Hooks
 
-> **Fase 2: n˙cleo do React** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 04
+> **Fase 2: n√∫cleo do React** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 04
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
-**Como** atendente de suporte com m˙ltiplas abas abertas no navegador,  
-**quero** visualizar a contagem de chamados pendentes no tÌtulo da aba do navegador e pesquisar solicitaÁıes pelo nome do cliente com filtros combinados,  
-**para** ser alertado visualmente sobre demandas n„o resolvidas e encontrar rapidamente chamados especÌficos atravÈs de uma lÛgica reutiliz·vel.
+**Como** atendente de suporte com m√∫ltiplas abas abertas no navegador,  
+**quero** visualizar a contagem de chamados pendentes no t√≠tulo da aba do navegador e pesquisar solicita√ß√µes pelo nome do cliente com filtros combinados,  
+**para** ser alertado visualmente sobre demandas n√£o resolvidas e encontrar rapidamente chamados espec√≠ficos atrav√©s de uma l√≥gica reutiliz√°vel.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. Quais s„o as 4 perguntas para decidir onde vive um estado? (dia 4)
+1. Quais s√£o as 4 perguntas para decidir onde vive um estado? (dia 4)
 2. Por que guardar o id selecionado em vez do objeto? (dia 4)
 3. O que dispara um re-render? (dia 3)
 
@@ -20,41 +20,42 @@
 
 ## Ponte com .NET
 
-- **`useEffect` ò assinar e desassinar recursos externos n„o gerenciados (`+=` / `-=`)**, ou o ciclo de um `IHostedService` com `StartAsync` e `StopAsync`. O setup executa apÛs o paint no navegador, e a funÁ„o de cleanup executa antes da prÛxima execuÁ„o ou quando o componente È desmontado.
-- **Onde quebra:** `useEffect` **n„o** È um mÈtodo de inicializaÁ„o (`OnInit`). Se a operaÁ„o n„o est· sincronizando com uma API ou subsistema **externo ao React**, ela n„o deve residir em um efeito.
-- **Custom Hook ò mÈtodo utilit·rio encapsulado**, com a capacidade especial de compor estados (`useState`) e efeitos de ciclo de vida internamente.
+- **`useEffect` Àú assinar e desassinar recursos externos n√£o gerenciados (`+=` / `-=`)**, ou o ciclo de um `IHostedService` com `StartAsync` e `StopAsync`. O setup executa ap√≥s o paint no navegador, e a fun√ß√£o de cleanup executa antes da pr√≥xima execu√ß√£o ou quando o componente √© desmontado.
+- **Onde quebra:** `useEffect` **n√£o** √© um m√©todo de inicializa√ß√£o (`OnInit`). Se a opera√ß√£o n√£o est√° sincronizando com uma API ou subsistema **externo ao React**, ela n√£o deve residir em um efeito.
+- **Custom Hook Àú m√©todo utilit√°rio encapsulado**, com a capacidade especial de compor estados (`useState`) e efeitos de ciclo de vida internamente.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta:** esta computaÁ„o deve ir no corpo da renderizaÁ„o, em um handler de eventos ou em um `useEffect`?
+**Pergunta:** esta computa√ß√£o deve ir no corpo da renderiza√ß√£o, em um handler de eventos ou em um `useEffect`?
 
-| Cen·rio | Onde colocar | Exemplo de AplicaÁ„o |
+| Cen√°rio | Onde colocar | Exemplo de Aplica√ß√£o |
 |---|---|---|
-| C·lculo deriv·vel de props ou de estado | **No render** (com `useMemo` apenas se comprovadamente caro) | Filtragem de listas, somatÛrios e agregaÁıes |
-| AÁ„o disparada diretamente por interaÁ„o do usu·rio | **No handler de evento** | Submeter formul·rio, clique de concluir, redirecionamento apÛs aÁ„o |
-| SincronizaÁ„o com sistema externo ao React | **`useEffect` com cleanup** | Atualizar `document.title`, timers (`setInterval`), WebSockets, integraÁ„o com SDKs DOM |
-| SincronizaÁ„o de busca de dados remotos | **TanStack Query** (dia 7) | Dados remotos de API (no Dia 06 usaremos `useEffect` apenas para expor suas limitaÁıes) |
-| Resetar estado interno quando prop muda | **Propriedade `key`** | ForÁar remount de componente filho quando o id selecionado altera |
+| C√°lculo deriv√°vel de props ou de estado | **No render** (com `useMemo` apenas se comprovadamente caro) | Filtragem de listas, somat√≥rios e agrega√ß√µes |
+| A√ß√£o disparada diretamente por intera√ß√£o do usu√°rio | **No handler de evento** | Submeter formul√°rio, clique de concluir, redirecionamento ap√≥s a√ß√£o |
+| Sincroniza√ß√£o com sistema externo ao React | **`useEffect` com cleanup** | Atualizar `document.title`, timers (`setInterval`), WebSockets, integra√ß√£o com SDKs DOM |
+| Sincroniza√ß√£o de busca de dados remotos | **TanStack Query** (dia 7) | Dados remotos de API (no Dia 06 usaremos `useEffect` apenas para expor suas limita√ß√µes) |
+| Resetar estado interno quando prop muda | **Propriedade `key`** | For√ßar remount de componente filho quando o id selecionado altera |
 
-**RecomendaÁ„o:** antes de redigir qualquer `useEffect`, pergunte-se: *"Com qual subsistema externo estou sincronizando?"*. Se n„o for um sistema externo (DOM global, conexıes, eventos de janela), o efeito È desnecess·rio.
+**Recomenda√ß√£o:** antes de redigir qualquer `useEffect`, pergunte-se: *"Com qual subsistema externo estou sincronizando?"*. Se n√£o for um sistema externo (DOM global, conex√µes, eventos de janela), o efeito √© desnecess√°rio.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Suporte a Filtro por Termo de Busca
-- Em `api/Program.cs`, enriquecer o endpoint `GET /solicitacoes` para aceitar par‚metros de query: `status` e `busca`.
-- Filtrar os itens verificando se `string.IsNullOrWhiteSpace(busca)` ou se o nome do cliente contÈm o termo digitado (case-insensitive).
+### Backend (`api/`) ‚Äî Suporte a Filtro por Termo de Busca
+- Em `api/Program.cs`, enriquecer o endpoint `GET /solicitacoes` para aceitar par√¢metros de query: `status` e `busca`.
+- Filtrar os itens verificando se `string.IsNullOrWhiteSpace(busca)` ou se o nome do cliente cont√©m o termo digitado (case-insensitive).
+- O front do dia 05 segue no mock local: o filtro e a busca do indicador rodam sobre a lista que j√° est√° no estado do React.
 
-### Frontend (`web/`) ó Efeito de DOM, EliminaÁ„o de Efeitos e Custom Hook
-- **Passo 1 ó Efeito LegÌtimo de DOM:** Criar um `useEffect` que sincroniza o `document.title` com `"Painel (N abertas)"`, reagindo a alteraÁıes nas solicitaÁıes.
-- **Passo 2 ó CaÁa ao Efeito Redundante:** Evitar anti-pattern de calcular listas filtradas dentro de `useEffect` com `setVisiveis`. Garantir que o linter (`npm run lint`) passe limpo sem avisos de `set-state-in-effect` ou `exhaustive-deps`.
-- **Passo 3 ó Custom Hook Reutiliz·vel:** Extrair a lÛgica de filtro e campo de busca para `src/hooks/useFiltroSolicitacoes.ts`. O hook deve encapsular os termos de busca, o status selecionado e expor a coleÁ„o filtrada pronta para consumo.
-- **Passo 4 ó InspeÁ„o de Ciclo de Vida:** Utilizar o React DevTools Profiler para checar as renderizaÁıes decorrentes da extraÁ„o do hook.
+### Frontend (`web/`) ‚Äî Efeito de DOM, Elimina√ß√£o de Efeitos e Custom Hook
+- **Passo 1 ‚Äî Efeito Leg√≠timo de DOM:** Criar um `useEffect` que sincroniza o `document.title` com `"Painel (N abertas)"`, reagindo a altera√ß√µes nas solicita√ß√µes.
+- **Passo 2 ‚Äî Ca√ßa ao Efeito Redundante:** Evitar anti-pattern de calcular listas filtradas dentro de `useEffect` com `setVisiveis`. Garantir que o linter (`npm run lint`) passe limpo sem avisos de `set-state-in-effect` ou `exhaustive-deps`.
+- **Passo 3 ‚Äî Custom Hook Reutiliz√°vel:** Extrair a l√≥gica de filtro e campo de busca para `src/hooks/useFiltroSolicitacoes.ts`. O hook deve encapsular os termos de busca, o status selecionado e expor a cole√ß√£o filtrada pronta para consumo.
+- **Passo 4 ‚Äî Inspe√ß√£o de Ciclo de Vida:** Utilizar o React DevTools Profiler para checar as renderiza√ß√µes decorrentes da extra√ß√£o do hook.
 
-### ReferÍncias TÈcnicas
+### Refer√™ncias T√©cnicas
 - Synchronizing with Effects: https://react.dev/learn/synchronizing-with-effects
 - You Might Not Need an Effect: https://react.dev/learn/you-might-not-need-an-effect
 - Reusing Logic with Custom Hooks: https://react.dev/learn/reusing-logic-with-custom-hooks
@@ -62,42 +63,42 @@
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O endpoint `GET /solicitacoes?busca=ana&status=aberta` filtra corretamente os registros combinando os par‚metros de busca.
-- [ ] **CA 2 (FE):** O tÌtulo da aba do navegador (`document.title`) reflete o n˙mero exato de solicitaÁıes com status `aberta` e atualiza reativamente ao concluir um chamado.
-- [ ] **CA 3 (FE):** O cÛdigo n„o utiliza `useEffect` para recalcular dados derivados e o comando `npm run lint` executa sem erros ou avisos de dependÍncias exaustivas.
-- [ ] **CA 4 (FE):** O hook `useFiltroSolicitacoes` est· isolado em `src/hooks/`, È consumido pelo `App` e cumpre rigorosamente as Regras dos Hooks (Rules of Hooks).
-- [ ] **CA 5 (Conceitual):** O aluno consegue explicar a finalidade do array de dependÍncias e a funÁ„o de limpeza (cleanup) do `useEffect`.
+- [ ] **CA 1 (BE):** O endpoint `GET /solicitacoes?busca=ana&status=aberta` filtra corretamente os registros combinando os par√¢metros de busca.
+- [ ] **CA 2 (FE):** O t√≠tulo da aba do navegador (`document.title`) reflete o n√∫mero exato de solicita√ß√µes com status `aberta` e atualiza reativamente ao concluir um chamado.
+- [ ] **CA 3 (FE):** O c√≥digo n√£o utiliza `useEffect` para recalcular dados derivados e o comando `npm run lint` executa sem erros ou avisos de depend√™ncias exaustivas.
+- [ ] **CA 4 (FE):** O hook `useFiltroSolicitacoes` est√° isolado em `src/hooks/`, √© consumido pelo `App` e cumpre rigorosamente as Regras dos Hooks (Rules of Hooks).
+- [ ] **CA 5 (Conceitual):** O aluno consegue explicar a finalidade do array de depend√™ncias e a fun√ß√£o de limpeza (cleanup) do `useEffect`.
 
 ---
 
 ## Armadilhas Comuns
 
-- **Mentir no array de dependÍncias:** Omitir vari·veis usadas no efeito para "evitar que rode de novo" resulta em valores defasados (stale closures).
-- **`useEffect` + `setState` em dados calcul·veis:** Desencadeia um ciclo adicional de renderizaÁ„o in˙til e mantÈm a interface descompassada por um frame.
-- **ExecuÁ„o duplicada em desenvolvimento:** O `StrictMode` propositalmente monta, desmonta e remonta efeitos para garantir que a funÁ„o de cleanup desfaÁa completamente assinaturas ativas.
-- **InvocaÁ„o condicional:** Hooks nunca podem ser posicionados dentro de blocos `if`, loops ou apÛs `return`.
+- **Mentir no array de depend√™ncias:** Omitir vari√°veis usadas no efeito para "evitar que rode de novo" resulta em valores defasados (stale closures).
+- **`useEffect` + `setState` em dados calcul√°veis:** Desencadeia um ciclo adicional de renderiza√ß√£o in√∫til e mant√©m a interface descompassada por um frame.
+- **Execu√ß√£o duplicada em desenvolvimento:** O `StrictMode` propositalmente monta, desmonta e remonta efeitos para garantir que a fun√ß√£o de cleanup desfa√ßa completamente assinaturas ativas.
+- **Invoca√ß√£o condicional:** Hooks nunca podem ser posicionados dentro de blocos `if`, loops ou ap√≥s `return`.
 
 ---
 
 ## Prompts Prontos
 
-- "Este useEffect È necess·rio? <cole>. Responda com base em 'You Might Not Need an Effect' e me explique o critÈrio, sem reescrever o cÛdigo."
+- "Este useEffect √© necess√°rio? <cole>. Responda com base em 'You Might Not Need an Effect' e me explique o crit√©rio, sem reescrever o c√≥digo."
 - "Explique o setup e o cleanup do useEffect comparando com assinar e desassinar eventos em C#."
 
 ---
 
 ## Pronto quando
 
-- [ ] O `useFiltroSolicitacoes` est· extraÌdo e em uso, e o `document.title` È atualizado por um efeito.
-- [ ] O `npm run lint` n„o acusa `set-state-in-effect` nem `exhaustive-deps`.
-- [ ] VocÍ diz em uma frase quando usar `useEffect` e d· 2 exemplos de quando **n„o** usar.
+- [ ] O `useFiltroSolicitacoes` est√° extra√≠do e em uso, e o `document.title` √© atualizado por um efeito.
+- [ ] O `npm run lint` n√£o acusa `set-state-in-effect` nem `exhaustive-deps`.
+- [ ] Voc√™ diz em uma frase quando usar `useEffect` e d√° 2 exemplos de quando **n√£o** usar.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-05.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-05): efeitos e custom hook"`.
-3. PrÛximo: [Dia 06 ó API .NET e contrato](us-06-integracao-openapi-tipado.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-05): efeitos e custom hook"`.
+3. Pr√≥ximo: [Dia 06 ‚Äî API .NET e contrato](us-06-integracao-openapi-tipado.md).

@@ -1,124 +1,125 @@
-# US-16 (Dia 16) ó Hospedagem Unificada SPA + API na Mesma Origem e Cache
+# US-16 (Dia 16) ‚Äî Hospedagem Unificada SPA + API na Mesma Origem e Cache
 
-> **Fase 5: integraÁ„o avanÁada** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 15
+> **Fase 5: integra√ß√£o avan√ßada** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 15
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
-**Como** engenheiro de software respons·vel pelo deploy da soluÁ„o,  
-**quero** empacotar a SPA React compilada para ser servida pelo prÛprio processo da Minimal API .NET com cabeÁalhos de cache diferenciados e rotas unificadas,  
-**para** rodar a aplicaÁ„o em produÁ„o em um ˙nico artefato auto-contido, eliminando a necessidade de CORS, mitigando riscos de cache do `index.html` e garantindo respostas 404 estritas em endpoints inexistentes.
+**Como** engenheiro de software respons√°vel pelo deploy da solu√ß√£o,  
+**quero** empacotar a SPA React compilada para ser servida pelo pr√≥prio processo da Minimal API .NET com cabe√ßalhos de cache diferenciados e rotas unificadas,  
+**para** rodar a aplica√ß√£o em produ√ß√£o em um √∫nico artefato auto-contido, eliminando a necessidade de CORS, mitigando riscos de cache do `index.html` e garantindo respostas 404 estritas em endpoints inexistentes.
 
 ---
 
 ## Aquecimento (5 min, sem consultar)
 
-1. O que o evento do SignalR carrega, e por quÍ? (dia 15)
-2. O que fazer depois de uma reconex„o? (dia 15)
+1. O que o evento do SignalR carrega, e por qu√™? (dia 15)
+2. O que fazer depois de uma reconex√£o? (dia 15)
 3. Por que o servidor precisa devolver o `index.html` para rotas da SPA? (dia 8)
 
 ---
 
 ## Ponte com .NET
 
-- **`npm run build` ò `dotnet publish`.** O compilador do Vite gera a pasta `dist/` contendo arquivos est·ticos puros (HTML, JS minificado com hash, CSS).
-- **`app.UseStaticFiles()` + `app.MapFallbackToFile("index.html")`:** Faz a API .NET atender como servidor de arquivos est·ticos para o frontend e resolver o fallback de rotas da SPA para qualquer URL desconhecida no backend.
-- **Vari·veis de ambiente em tempo de build vs. runtime:** Em C#, o `appsettings.json` È lido em tempo de execuÁ„o (runtime). No frontend compilado, vari·veis como `import.meta.env.VITE_*` s„o **substituÌdas e fixadas em texto est·tico durante o build** (`npm run build`). Mudar a vari·vel de ambiente no servidor onde o bin·rio roda n„o altera o JS j· construÌdo.
+- **`npm run build` Àú `dotnet publish`.** O compilador do Vite gera a pasta `dist/` contendo arquivos est√°ticos puros (HTML, JS minificado com hash, CSS).
+- **`app.UseStaticFiles()` + `app.MapFallbackToFile("index.html")`:** Faz a API .NET atender como servidor de arquivos est√°ticos para o frontend e resolver o fallback de rotas da SPA para qualquer URL desconhecida no backend.
+- **Vari√°veis de ambiente em tempo de build vs. runtime:** Em C#, o `appsettings.json` √© lido em tempo de execu√ß√£o (runtime). No frontend compilado, vari√°veis como `import.meta.env.VITE_*` s√£o **substitu√≠das e fixadas em texto est√°tico durante o build** (`npm run build`). Mudar a vari√°vel de ambiente no servidor onde o bin√°rio roda n√£o altera o JS j√° constru√≠do.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta 1:** qual topologia de hospedagem adotar em produÁ„o?
+**Pergunta 1:** qual topologia de hospedagem adotar em produ√ß√£o?
 
-| Topologia | Como Opera | Vantagens | Desvantagens | Cen·rio Indicado |
+| Topologia | Como Opera | Vantagens | Desvantagens | Cen√°rio Indicado |
 |---|---|---|---|---|
-| **API serve a SPA (`wwwroot`)** | A pasta `dist/` vai para `wwwroot/` e È servida pelo Kestrel | Um ˙nico deploy; mesma origem estrita; zero CORS; autenticaÁ„o por cookies simplificada | Deploy acoplado (front e back sobem juntos) | **AplicaÁıes corporativas e painÈis internos** (recomendado para o projeto) |
-| **Front em CDN / Storage + API em subdomÌnio** | Ex.: `app.empresa.com` e `api.empresa.com` | Deploys 100% independentes; distribuiÁ„o global via CDN | Requer CORS com credenciais; configuraÁ„o de cookies cross-domain delicada | Sites p˙blicos com alta escala global |
-| **Reverse Proxy / Gateway unificado (YARP / Nginx)** | Proxy na porta 80/443 roteia `/` para o front e `/api` para o backend | Mesma origem para o navegador mantendo deploys independentes | Mais uma camada de infraestrutura para gerenciar | Ambientes distribuÌdos com m˙ltiplos microserviÁos |
+| **API serve a SPA (`wwwroot`)** | A pasta `dist/` vai para `wwwroot/` e √© servida pelo Kestrel | Um √∫nico deploy; mesma origem estrita; zero CORS; autentica√ß√£o por cookies simplificada | Deploy acoplado (front e back sobem juntos) | **Aplica√ß√µes corporativas e pain√©is internos** (recomendado para o projeto) |
+| **Front em CDN / Storage + API em subdom√≠nio** | Ex.: `app.empresa.com` e `api.empresa.com` | Deploys 100% independentes; distribui√ß√£o global via CDN | Requer CORS com credenciais; configura√ß√£o de cookies cross-domain delicada | Sites p√∫blicos com alta escala global |
+| **Reverse Proxy / Gateway unificado (YARP / Nginx)** | Proxy na porta 80/443 roteia `/` para o front e `/api` para o backend | Mesma origem para o navegador mantendo deploys independentes | Mais uma camada de infraestrutura para gerenciar | Ambientes distribu√≠dos com m√∫ltiplos microservi√ßos |
 
-**Pergunta 2:** como configurar a polÌtica de cache HTTP?
-- **Arquivos de Assets (`/assets/*.js`, `*.css`):** Possuem hash criptogr·fico ˙nico em seus nomes gerados pelo Vite (ex.: `index-D8x2a1.js`). Devem ser cacheados agressivamente:
+**Pergunta 2:** como configurar a pol√≠tica de cache HTTP?
+- **Arquivos de Assets (`/assets/*.js`, `*.css`):** Possuem hash criptogr√°fico √∫nico em seus nomes gerados pelo Vite (ex.: `index-D8x2a1.js`). Devem ser cacheados agressivamente:
   `Cache-Control: public, max-age=31536000, immutable`.
-- **Arquivo `index.html`:** O arquivo de entrada **nunca** pode sofrer cache de longa duraÁ„o. Se o `index.html` ficar em cache, deploys novos far„o o usu·rio apontar para chunks antigos que foram apagados do servidor:
+- **Arquivo `index.html`:** O arquivo de entrada **nunca** pode sofrer cache de longa dura√ß√£o. Se o `index.html` ficar em cache, deploys novos far√£o o usu√°rio apontar para chunks antigos que foram apagados do servidor:
   `Cache-Control: no-cache`.
 
-**A armadilha crÌtica de fallback:** Se vocÍ configurar `MapFallbackToFile("index.html")` sem restriÁıes, uma requisiÁ„o para uma rota de API inexistente (ex.: `GET /api/recurso-inexistente`) devolver· status **200 OK com o cÛdigo HTML da p·gina**, quebrando clientes de API. Deve-se interceptar `/api/{**rest}` respondendo `404 Not Found` **antes** do fallback da SPA.
+**A armadilha cr√≠tica de fallback:** Se voc√™ configurar `MapFallbackToFile("index.html")` sem restri√ß√µes, uma requisi√ß√£o para uma rota de API inexistente (ex.: `GET /api/recurso-inexistente`) devolver√° status **200 OK com o c√≥digo HTML da p√°gina**, quebrando clientes de API. Deve-se interceptar `/api/{**rest}` respondendo `404 Not Found` **antes** do fallback da SPA.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Pipeline de Hospedagem Est·tica e Fallbacks
+### Backend (`api/`) ‚Äî Pipeline de Hospedagem Est√°tica e Fallbacks
 - Em `api/Program.cs`:
-  - Agrupar todos os endpoints de negÛcio sob o prefixo `/api` via `app.MapGroup("/api")`.
-  - Habilitar suporte a arquivos est·ticos na pasta `wwwroot`: `app.UseDefaultFiles()` e `app.UseStaticFiles(...)`.
-  - Configurar as opÁıes de `StaticFileOptions` para injetar os cabeÁalhos de cache:
+  - Agrupar todos os endpoints de neg√≥cio sob o prefixo `/api` via `app.MapGroup("/api")`.
+  - Habilitar suporte a arquivos est√°ticos na pasta `wwwroot`: `app.UseDefaultFiles()` e `app.UseStaticFiles(...)`.
+  - Configurar as op√ß√µes de `StaticFileOptions` para injetar os cabe√ßalhos de cache:
     - Para o `index.html`: `Cache-Control: no-cache`.
     - Para arquivos dentro de `/assets/`: `Cache-Control: public, max-age=31536000, immutable`.
   - Configurar a ordem estrita de fallbacks no pipeline:
     1. `app.MapFallback("/api/{**rest}", () => Results.NotFound());`
     2. `app.MapFallbackToFile("index.html");`
+- No mesmo dia o front passa a ser servido pela pr√≥pria API; o proxy de desenvolvimento deixa de remover o prefixo `/api`.
 
-### Frontend (`web/`) ó MigraÁ„o para URL Relativa e Build de ProduÁ„o
-- **Passo 1 ó EliminaÁ„o de Vari·veis Absolutas:** Remover referÍncias a `VITE_API_URL`. Todos os serviÁos de API passam a utilizar URLs relativas iniciando com `/api/...` (aproveitando a mesma origem).
-- **Passo 2 ó Ajuste do Proxy de Desenvolvimento:** Em `vite.config.ts`, ajustar o proxy para repassar `/api` diretamente para a porta da API .NET sem remover o prefixo.
-- **Passo 3 ó Build e PublicaÁ„o no Backend:**
-  - Gerar os artefatos de produÁ„o da SPA com `npm run build` na pasta `web/`.
-  - Copiar todo o conte˙do gerado em `web/dist/` para a pasta `api/wwwroot/`.
-- **Passo 4 ó ValidaÁ„o em Processo ⁄nico:**
+### Frontend (`web/`) ‚Äî Migra√ß√£o para URL Relativa e Build de Produ√ß√£o
+- **Passo 1 ‚Äî Elimina√ß√£o de Vari√°veis Absolutas:** Remover refer√™ncias a `VITE_API_URL`. Todos os servi√ßos de API passam a utilizar URLs relativas iniciando com `/api/...` (aproveitando a mesma origem).
+- **Passo 2 ‚Äî Ajuste do Proxy de Desenvolvimento:** Em `vite.config.ts`, ajustar o proxy para repassar `/api` diretamente para a porta da API .NET sem remover o prefixo.
+- **Passo 3 ‚Äî Build e Publica√ß√£o no Backend:**
+  - Gerar os artefatos de produ√ß√£o da SPA com `npm run build` na pasta `web/`.
+  - Copiar todo o conte√∫do gerado em `web/dist/` para a pasta `api/wwwroot/`.
+- **Passo 4 ‚Äî Valida√ß√£o em Processo √önico:**
   - Desligar completamente o servidor de desenvolvimento do Vite.
   - Executar apenas a API .NET via `dotnet run` na pasta `api/`.
-  - Acessar a aplicaÁ„o pela porta Kestrel da API (ex.: `http://localhost:5000`):
+  - Acessar a aplica√ß√£o pela porta Kestrel da API (ex.: `http://localhost:5000`):
     - Realizar login e listagem;
     - Testar recarregamento (F5) em rota profunda (`/solicitacoes/1`);
-    - Confirmar que `GET /api/nao-existe` retorna **404 Not Found** (e n„o HTML).
-- **Passo 5 ó ADR 16:** Registrar em `decisoes/16-deploy.md` a topologia unificada de deploy e a estratÈgia de cabeÁalhos de cache.
+    - Confirmar que `GET /api/nao-existe` retorna **404 Not Found** (e n√£o HTML).
+- **Passo 5 ‚Äî ADR 16:** Registrar em `decisoes/16-deploy.md` a topologia unificada de deploy e a estrat√©gia de cabe√ßalhos de cache.
 
-### ReferÍncias TÈcnicas
-- Arquivos Est·ticos no ASP.NET Core: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/static-files
+### Refer√™ncias T√©cnicas
+- Arquivos Est√°ticos no ASP.NET Core: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/static-files
 - Vite Static Deploy: https://vite.dev/guide/static-deploy
 - MDN Cache-Control: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control
 - YARP (Yet Another Reverse Proxy) Overview: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/yarp/yarp-overview
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** A Minimal API serve o frontend e a API a partir de um ˙nico processo execut·vel.
+- [ ] **CA 1 (BE):** A Minimal API serve o frontend e a API a partir de um √∫nico processo execut√°vel.
 - [ ] **CA 2 (BE):** Acessar URLs de rotas SPA diretamente no navegador (ex.: `/solicitacoes/2`) responde 200 servindo o `index.html`.
 - [ ] **CA 3 (BE):** Acessar rotas `/api/...` inexistentes responde com status HTTP 404 estrito (sem retornar o documento HTML).
-- [ ] **CA 4 (BE):** Os cabeÁalhos de resposta HTTP contÍm `Cache-Control: no-cache` para o `index.html` e `Cache-Control: public, max-age=31536000, immutable` para arquivos est·ticos em `/assets/`.
-- [ ] **CA 5 (FE):** O cÛdigo fonte do frontend n„o possui referÍncias fixas a domÌnios ou portas de API, utilizando chamadas relativas `/api`.
-- [ ] **CA 6 (FE):** Todos os fluxos da aplicaÁ„o (autenticaÁ„o, paginaÁ„o, formul·rio, detalhes e WebSockets) funcionam com o servidor de desenvolvimento Vite desligado.
-- [ ] **CA 7 (ADR):** O arquivo `decisoes/16-deploy.md` est· formalizado detalhando as trÍs topologias de hospedagem e suas polÌticas de cache.
+- [ ] **CA 4 (BE):** Os cabe√ßalhos de resposta HTTP cont√™m `Cache-Control: no-cache` para o `index.html` e `Cache-Control: public, max-age=31536000, immutable` para arquivos est√°ticos em `/assets/`.
+- [ ] **CA 5 (FE):** O c√≥digo fonte do frontend n√£o possui refer√™ncias fixas a dom√≠nios ou portas de API, utilizando chamadas relativas `/api`.
+- [ ] **CA 6 (FE):** Todos os fluxos da aplica√ß√£o (autentica√ß√£o, pagina√ß√£o, formul√°rio, detalhes e WebSockets) funcionam com o servidor de desenvolvimento Vite desligado.
+- [ ] **CA 7 (ADR):** O arquivo `decisoes/16-deploy.md` est√° formalizado detalhando as tr√™s topologias de hospedagem e suas pol√≠ticas de cache.
 
 ---
 
 ## Armadilhas Comuns
 
 - **Fallback engolindo erros 404 da API:** Esquecer a regra `MapFallback("/api/{**rest}", () => Results.NotFound())` faz o servidor responder 200 com HTML para rotas de backend que falharam, mascarando problemas graves.
-- **Cache agressivo no `index.html`:** O navegador guardar· o arquivo HTML antigo e continuar· tentando carregar arquivos JS com hashes que n„o existem mais apÛs o deploy, deixando a aplicaÁ„o quebrada para o usu·rio.
-- **Invers„o da ordem de middlewares:** Chamar `MapFallbackToFile` antes do registro dos endpoints de API impede que as rotas da Minimal API sejam alcanÁadas.
+- **Cache agressivo no `index.html`:** O navegador guardar√° o arquivo HTML antigo e continuar√° tentando carregar arquivos JS com hashes que n√£o existem mais ap√≥s o deploy, deixando a aplica√ß√£o quebrada para o usu√°rio.
+- **Invers√£o da ordem de middlewares:** Chamar `MapFallbackToFile` antes do registro dos endpoints de API impede que as rotas da Minimal API sejam alcan√ßadas.
 
 ---
 
 ## Prompts Prontos
 
-- "Compare as 3 topologias de deploy de SPA + API para uma empresa que usa Azure. Me dÍ os critÈrios, sem decidir por mim."
+- "Compare as 3 topologias de deploy de SPA + API para uma empresa que usa Azure. Me d√™ os crit√©rios, sem decidir por mim."
 
 ---
 
 ## Pronto quando
 
-- [ ] Um ˙nico processo, a API, serve o painel e a API. O F5 numa rota profunda funciona, e `/api/nao-existe` devolve 404, n„o HTML.
-- [ ] O front n„o usa `VITE_API_URL`, e o cache est· certo nos dois tipos de arquivo.
-- [ ] VocÍ explica as 3 topologias e quando cada uma faz sentido.
-- [ ] O ADR `decisoes/16-deploy.md` est· registrado.
+- [ ] Um √∫nico processo, a API, serve o painel e a API. O F5 numa rota profunda funciona, e `/api/nao-existe` devolve 404, n√£o HTML.
+- [ ] O front n√£o usa `VITE_API_URL`, e o cache est√° certo nos dois tipos de arquivo.
+- [ ] Voc√™ explica as 3 topologias e quando cada uma faz sentido.
+- [ ] O ADR `decisoes/16-deploy.md` est√° registrado.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-16.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-16): api servindo a spa na mesma origem"`.
-3. PrÛximo: [Dia 17 ó Revis„o e mapa de decisıes](us-17-consolidacao-mapa-decisoes.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-16): api servindo a spa na mesma origem"`.
+3. Pr√≥ximo: [Dia 17 ‚Äî Revis√£o e mapa de decis√µes](us-17-consolidacao-mapa-decisoes.md).

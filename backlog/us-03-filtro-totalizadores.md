@@ -1,11 +1,11 @@
-# US-03 (Dia 03) ó Filtro por Status, Totalizadores e TransiÁ„o de Conclus„o
+# US-03 (Dia 03) ‚Äî Filtro por Status, Totalizadores e Transi√ß√£o de Conclus√£o
 
-> **Fase 2: n˙cleo do React** ∑ ? 1h essencial / 2h com extras ∑ PrÈ-requisito: Dia 02
+> **Fase 2: n√∫cleo do React** ¬∑ ? 1h essencial / 2h com extras ¬∑ Pr√©-requisito: Dia 02
 
-## HistÛria de Usu·rio
+## Hist√≥ria de Usu√°rio
 
 **Como** atendente de suporte,  
-**quero** filtrar os chamados pelo status, visualizar a contagem e a soma dos valores em aberto e concluir solicitaÁıes pendentes,  
+**quero** filtrar os chamados pelo status, visualizar a contagem e a soma dos valores em aberto e concluir solicita√ß√µes pendentes,  
 **para** priorizar os atendimentos e atualizar o ciclo de vida dos chamados sem recarregar a tela.
 
 ---
@@ -13,56 +13,57 @@
 ## Aquecimento (5 min, sem consultar)
 
 1. O componente filho pode alterar as props que recebeu? Nao, Prop vem do componente pai
-2. Por que `key={index}` È problem·tico? (dia 2)
-3. Como a kata `atualizarStatus` evitava mutaÁ„o? (dia 1)
+2. Por que `key={index}` √© problem√°tico? (dia 2)
+3. Como a kata `atualizarStatus` evitava muta√ß√£o? (dia 1)
 
 ---
 
 ## Ponte com .NET
 
-- **`useState` ò propriedade que dispara notificaÁ„o reativa (`INotifyPropertyChanged`).** Invocar a funÁ„o modificadora (`setX`) avisa o React que um novo render deve ser agendado.
-- **Onde quebra 1: o estado È imut·vel.** Em C# vocÍ pode mutar um objeto existente na lista; no React, vocÍ **substitui** o objeto por uma nova inst‚ncia clonada com as alteraÁıes.
-- **Onde quebra 2: re-render È a execuÁ„o completa da funÁ„o.** Dentro do escopo da renderizaÁ„o atual, as vari·veis de estado s„o **snapshots** est·ticos (como par‚metros passados por valor em C#) que permanecem inalterados atÈ o prÛximo ciclo.
+- **`useState` Àú propriedade que dispara notifica√ß√£o reativa (`INotifyPropertyChanged`).** Invocar a fun√ß√£o modificadora (`setX`) avisa o React que um novo render deve ser agendado.
+- **Onde quebra 1: o estado √© imut√°vel.** Em C# voc√™ pode mutar um objeto existente na lista; no React, voc√™ **substitui** o objeto por uma nova inst√¢ncia clonada com as altera√ß√µes.
+- **Onde quebra 2: re-render √© a execu√ß√£o completa da fun√ß√£o.** Dentro do escopo da renderiza√ß√£o atual, as vari√°veis de estado s√£o **snapshots** est√°ticos (como par√¢metros passados por valor em C#) que permanecem inalterados at√© o pr√≥ximo ciclo.
 
 ---
 
-## Decis„o Arquitetural do Dia
+## Decis√£o Arquitetural do Dia
 
-**Pergunta:** este valor deve ser armazenado em estado (`useState`) ou calculado em tempo de renderizaÁ„o (derivado)?
+**Pergunta:** este valor deve ser armazenado em estado (`useState`) ou calculado em tempo de renderiza√ß√£o (derivado)?
 
-FaÁa o teste das 3 perguntas do *Thinking in React*:
-1. O valor permanece est·tico o tempo todo?
-2. Ele È fornecido pelo componente pai atravÈs de props?
-3. … possÌvel comput·-lo a partir de outros estados ou props j· existentes?
+Fa√ßa o teste das 3 perguntas do *Thinking in React*:
+1. O valor permanece est√°tico o tempo todo?
+2. Ele √© fornecido pelo componente pai atrav√©s de props?
+3. √â poss√≠vel comput√°-lo a partir de outros estados ou props j√° existentes?
 
-Se responder "sim" a qualquer uma, **n„o È estado**.
+Se responder "sim" a qualquer uma, **n√£o √© estado**.
 
 | Dado no painel | Estado? | Justificativa |
 |---|---|---|
-| Lista de solicitaÁıes | Sim (temporariamente) | … alterada pela aÁ„o de concluir. (No dia 7 passar· a ser gerenciada como cache do servidor). |
-| Filtro selecionado | Sim | … mut·vel pelo clique do usu·rio e n„o pode ser derivado de outros dados. |
-| Lista filtrada | **N„o** | Calculada em tempo de render via `lista.filter(...)`. |
-| Quantidade visÌvel | **N„o** | Derivado diretamente via `visiveis.length`. |
-| Total monet·rio | **N„o** | Derivado diretamente via `visiveis.reduce(...)`. |
+| Lista de solicita√ß√µes | Sim (temporariamente) | √â alterada pela a√ß√£o de concluir. (No dia 7 passar√° a ser gerenciada como cache do servidor). |
+| Filtro selecionado | Sim | √â mut√°vel pelo clique do usu√°rio e n√£o pode ser derivado de outros dados. |
+| Lista filtrada | **N√£o** | Calculada em tempo de render via `lista.filter(...)`. |
+| Quantidade vis√≠vel | **N√£o** | Derivado diretamente via `visiveis.length`. |
+| Total monet√°rio | **N√£o** | Derivado diretamente via `visiveis.reduce(...)`. |
 
-**RecomendaÁ„o:** mantenha o estado **mÌnimo e indispens·vel**. Derive todo o restante no corpo do render. Estado duplicado È a causa prim·ria de dessincronizaÁ„o de telas em React.
+**Recomenda√ß√£o:** mantenha o estado **m√≠nimo e indispens√°vel**. Derive todo o restante no corpo do render. Estado duplicado √© a causa prim√°ria de dessincroniza√ß√£o de telas em React.
 
 ---
 
-## EspecificaÁ„o de Entrega (Backlog TÈcnico)
+## Especifica√ß√£o de Entrega (Backlog T√©cnico)
 
-### Backend (`api/`) ó Endpoint de TransiÁ„o de Status
+### Backend (`api/`) ‚Äî Endpoint de Transi√ß√£o de Status
 - Em `api/Program.cs`, implementar o endpoint `PATCH /solicitacoes/{id}/status` recebendo `AlterarStatusRequest`.
-- Validar se a solicitaÁ„o existe (retornar `Results.NotFound()` caso contr·rio).
-- Permitir a transiÁ„o do status `Aberta` para `Concluida`, atualizando a coleÁ„o em memÛria e retornando `Results.Ok(solicitacaoAtualizada)`.
+- Validar se a solicita√ß√£o existe (retornar `Results.NotFound()` caso contr√°rio).
+- Permitir a transi√ß√£o do status `Aberta` para `Concluida`, atualizando a cole√ß√£o em mem√≥ria e retornando `Results.Ok(solicitacaoAtualizada)`.
+- No mesmo dia o front continua no mock local: a conclus√£o √© simulada no estado do React com `.map()`, sem chamar a API.
 
-### Frontend (`web/`) ó Reatividade, Filtros e Conclus„o sem MutaÁ„o
-- **Passo 1 ó Estado Reativo de Filtro:** Adicionar botıes de filtro por status (`todas`, `aberta`, `em_analise`, `concluida`, `recusada`) e armazenar a seleÁ„o atual em `useState`.
-- **Passo 2 ó Dados Derivados:** Computar a lista filtrada, a quantidade de itens e o valor total acumulado no render, sem criar vari·veis de estado redundantes.
-- **Passo 3 ó Estado como Snapshot:** Compreender o comportamento de atualizaÁıes em lote e entender por que `setCount(count + 1)` disparado 3 vezes consecutivas no mesmo evento resulta em incremento ˙nico.
-- **Passo 4 ó AÁ„o de Conclus„o Imut·vel:** Adicionar o bot„o "Concluir" para solicitaÁıes abertas, gerando um novo array imut·vel atravÈs de `.map()` e clonagem (`{ ...s, status: 'concluida' }`).
+### Frontend (`web/`) ‚Äî Reatividade, Filtros e Conclus√£o sem Muta√ß√£o
+- **Passo 1 ‚Äî Estado Reativo de Filtro:** Adicionar bot√µes de filtro por status (`todas`, `aberta`, `em_analise`, `concluida`, `recusada`) e armazenar a sele√ß√£o atual em `useState`.
+- **Passo 2 ‚Äî Dados Derivados:** Computar a lista filtrada, a quantidade de itens e o valor total acumulado no render, sem criar vari√°veis de estado redundantes.
+- **Passo 3 ‚Äî Estado como Snapshot:** Compreender o comportamento de atualiza√ß√µes em lote e entender por que `setCount(count + 1)` disparado 3 vezes consecutivas no mesmo evento resulta em incremento √∫nico.
+- **Passo 4 ‚Äî A√ß√£o de Conclus√£o Imut√°vel:** Adicionar o bot√£o "Concluir" para solicita√ß√µes abertas, gerando um novo array imut√°vel atrav√©s de `.map()` e clonagem (`{ ...s, status: 'concluida' }`).
 
-### ReferÍncias TÈcnicas
+### Refer√™ncias T√©cnicas
 - State: A Component's Memory: https://react.dev/learn/state-a-components-memory
 - Responding to Events: https://react.dev/learn/responding-to-events
 - Render and Commit: https://react.dev/learn/render-and-commit
@@ -72,43 +73,43 @@ Se responder "sim" a qualquer uma, **n„o È estado**.
 
 ---
 
-## CritÈrios de Aceite (CA)
+## Crit√©rios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** O endpoint `PATCH /solicitacoes/{id}/status` atualiza o status de uma solicitaÁ„o existente para `concluida` e retorna 404 para id inexistente.
-- [ ] **CA 2 (FE):** A seleÁ„o de um filtro por status atualiza instantaneamente a lista exibida em tela.
-- [ ] **CA 3 (FE):** Os totalizadores (contador de solicitaÁıes e valor total acumulado) atualizam dinamicamente com o filtro, sem uso de `useState` prÛprio.
-- [ ] **CA 4 (FE):** O bot„o "Concluir" È renderizado condicionalmente apenas em itens com status `aberta`.
-- [ ] **CA 5 (FE):** Ao clicar em "Concluir", a solicitaÁ„o tem seu status alterado para `concluida`, o bot„o desaparece e os totalizadores s„o recalculados sem mutaÁ„o do array original.
+- [ ] **CA 1 (BE):** O endpoint `PATCH /solicitacoes/{id}/status` atualiza o status de uma solicita√ß√£o existente para `concluida` e retorna 404 para id inexistente.
+- [ ] **CA 2 (FE):** A sele√ß√£o de um filtro por status atualiza instantaneamente a lista exibida em tela.
+- [ ] **CA 3 (FE):** Os totalizadores (contador de solicita√ß√µes e valor total acumulado) atualizam dinamicamente com o filtro, sem uso de `useState` pr√≥prio.
+- [ ] **CA 4 (FE):** O bot√£o "Concluir" √© renderizado condicionalmente apenas em itens com status `aberta`.
+- [ ] **CA 5 (FE):** Ao clicar em "Concluir", a solicita√ß√£o tem seu status alterado para `concluida`, o bot√£o desaparece e os totalizadores s√£o recalculados sem muta√ß√£o do array original.
 - [ ] **CA 6 (Conceitual):** O aluno sabe explicar o motivo pelo qual `setCount(count + 1)` executado 3 vezes no mesmo handler soma apenas 1.
 
 ---
 
 ## Armadilhas Comuns
 
-- **MutaÁ„o direta:** MÈtodos que mutam arrays (`push`, `splice`, `s.status = ...`) n„o alteram a referÍncia do objeto, impedindo o React de agendar novo render.
-- **Leitura imediata de estado:** ApÛs executar `setFiltro(novo)`, a vari·vel `filtro` ainda reflete o valor antigo durante a execuÁ„o do handler atual.
-- **Passagem de handlers:** `onClick={handleClick}` vincula a referÍncia da funÁ„o; `onClick={handleClick()}` executa a funÁ„o durante a renderizaÁ„o gerando loop infinito.
+- **Muta√ß√£o direta:** M√©todos que mutam arrays (`push`, `splice`, `s.status = ...`) n√£o alteram a refer√™ncia do objeto, impedindo o React de agendar novo render.
+- **Leitura imediata de estado:** Ap√≥s executar `setFiltro(novo)`, a vari√°vel `filtro` ainda reflete o valor antigo durante a execu√ß√£o do handler atual.
+- **Passagem de handlers:** `onClick={handleClick}` vincula a refer√™ncia da fun√ß√£o; `onClick={handleClick()}` executa a fun√ß√£o durante a renderiza√ß√£o gerando loop infinito.
 
 ---
 
 ## Prompts Prontos
 
-- "Explique 'state as a snapshot' do React com um exemplo, comparando com passar par‚metro por valor em C#."
-- "Tenho estes estados no componente: <cole>. Algum deles È derivado? Me ajude a decidir, sem reescrever o cÛdigo."
-- `/dica o bot„o Concluir n„o atualiza a tela`
+- "Explique 'state as a snapshot' do React com um exemplo, comparando com passar par√¢metro por valor em C#."
+- "Tenho estes estados no componente: <cole>. Algum deles √© derivado? Me ajude a decidir, sem reescrever o c√≥digo."
+- `/dica o bot√£o Concluir n√£o atualiza a tela`
 
 ---
 
 ## Pronto quando
 
-- [ ] Filtro, contador, total e Concluir funcionam, sem nenhuma mutaÁ„o.
-- [ ] Nenhum `useState` guarda algo que d· para calcular.
-- [ ] VocÍ explica por que `setCount(count + 1)` trÍs vezes no mesmo clique soma sÛ 1.
+- [ ] Filtro, contador, total e Concluir funcionam, sem nenhuma muta√ß√£o.
+- [ ] Nenhum `useState` guarda algo que d√° para calcular.
+- [ ] Voc√™ explica por que `setCount(count + 1)` tr√™s vezes no mesmo clique soma s√≥ 1.
 
 ---
 
 ## Fechamento
 
 1. Rode `/fechar-dia`, ou preencha `diario/dia-03.md` a partir do [modelo](../diario/_modelo.md).
-2. FaÁa o commit: `git add . && git commit -m "feat(dia-03): estado e filtro"`.
-3. PrÛximo: [Dia 04 ó Onde vive cada estado](us-04-visao-detalhe-estado.md).
+2. Fa√ßa o commit: `git add . && git commit -m "feat(dia-03): estado e filtro"`.
+3. Pr√≥ximo: [Dia 04 ‚Äî Onde vive cada estado](us-04-visao-detalhe-estado.md).
