@@ -51,9 +51,9 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Padronização de ProblemDetails e Rota de Teste de Falha
-- Em `api/Program.cs`, configurar `builder.Services.AddProblemDetails()` e `app.UseExceptionHandler()` para que qualquer exceção vire `ProblemDetails` (RFC 9457).
-- Padronizar as respostas de erro do dia com `Results.Problem(...)`.
-- Criar o endpoint de diagnóstico `GET /solicitacoes/falha-simulada` (disponível apenas em Development) retornando `Results.Problem(statusCode: 500, detail: "Falha transitória simulada")` para testar os retries do cliente.
+- Na API (`api/`), configurar o suporte a `ProblemDetails` (RFC 9457 / RFC 7807) para tratamento global de exceções.
+- Padronizar as respostas de erro da aplicação retornando o schema `ProblemDetails` com propriedades em camelCase (`title`, `status`, `detail`, `instance`).
+- Criar o endpoint de diagnóstico `GET /solicitacoes/falha-simulada` (disponível apenas em Development) retornando `ProblemDetails` com status 500 (`detail: "Falha transitória simulada"`) para testar os retries do cliente.
 - No mesmo dia o front lê o `ProblemDetails` na camada de requisição e a Error Boundary cobre a queda da árvore.
 
 ### Frontend (`web/`) — Resiliência, Retries Inteligentes e Error Boundary

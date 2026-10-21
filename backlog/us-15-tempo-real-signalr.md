@@ -47,10 +47,10 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Hub SignalR e Disparo de Eventos
-- Em `api/Program.cs`:
-  - Registrar SignalR: `builder.Services.AddSignalR()`.
-  - Criar e mapear a classe `SolicitacoesHub : Hub` na rota `/hubs/solicitacoes`, exigindo autenticação (`RequireAuthorization()`).
-  - No `POST /solicitacoes` e no `PATCH /solicitacoes/{id}/status`: injetar `IHubContext<SolicitacoesHub>` e, após persistir, disparar em broadcast para todos os conectados:
+- Na API (`api/`):
+  - Registrar serviços do SignalR (`builder.Services.AddSignalR()`).
+  - Criar e mapear a classe `SolicitacoesHub : Hub` na rota `/hubs/solicitacoes`, exigindo autenticação.
+  - Nas operações de escrita (`POST /solicitacoes` e `PATCH /solicitacoes/{id}/status`): injetar `IHubContext<SolicitacoesHub>` e, após persistir, disparar em broadcast para todos os conectados:
     ```csharp
     await hubContext.Clients.All.SendAsync("SolicitacaoAlterada", new { id = solicitacao.Id });
     ```

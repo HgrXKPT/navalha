@@ -46,9 +46,9 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Endpoint Paginado
-- Em `api/Program.cs`, adequar `GET /solicitacoes` para receber os parâmetros `pagina` (default: 1) e `tamanhoPagina` (default: 10), além de `status` e `busca`.
+- Na API (`api/`), adequar o endpoint `GET /solicitacoes` para receber os parâmetros `pagina` (default: 1) e `tamanhoPagina` (default: 10), além de `status` e `busca`.
 - Retornar o contrato paginado `SolicitacoesPaginadasResponse(Itens, Total, Pagina, TamanhoPagina)`.
-- Aplicar a paginação na coleção em memória com `Skip` e `Take`.
+- Aplicar a paginação na coleção de solicitações com `Skip` e `Take`.
 - No mesmo dia o front migra a listagem para o TanStack Query e consome o envelope paginado.
 
 ### Frontend (`web/`) — Migração para TanStack Query

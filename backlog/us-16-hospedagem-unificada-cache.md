@@ -49,15 +49,15 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Pipeline de Hospedagem Estática e Fallbacks
-- Em `api/Program.cs`:
-  - Agrupar todos os endpoints de negócio sob o prefixo `/api` via `app.MapGroup("/api")`.
-  - Habilitar suporte a arquivos estáticos na pasta `wwwroot`: `app.UseDefaultFiles()` e `app.UseStaticFiles(...)`.
+- Na API (`api/`):
+  - Agrupar todos os endpoints de negócio sob o prefixo `/api` (via `MapGroup("/api")` ou convenção de rotas em Controllers).
+  - Habilitar suporte a arquivos estáticos na pasta `wwwroot` (`UseDefaultFiles()` e `UseStaticFiles(...)`).
   - Configurar as opções de `StaticFileOptions` para injetar os cabeçalhos de cache:
     - Para o `index.html`: `Cache-Control: no-cache`.
     - Para arquivos dentro de `/assets/`: `Cache-Control: public, max-age=31536000, immutable`.
   - Configurar a ordem estrita de fallbacks no pipeline:
-    1. `app.MapFallback("/api/{**rest}", () => Results.NotFound());`
-    2. `app.MapFallbackToFile("index.html");`
+    1. Retornar status HTTP 404 para rotas `/api/...` não encontradas.
+    2. Redirecionar rotas SPA para `index.html` (`MapFallbackToFile("index.html")`).
 - No mesmo dia o front passa a ser servido pela própria API; o proxy de desenvolvimento deixa de remover o prefixo `/api`.
 
 ### Frontend (`web/`) — Migração para URL Relativa e Build de Produção
@@ -85,7 +85,7 @@
 
 ## Critérios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** A Minimal API serve o frontend e a API a partir de um único processo executável.
+- [ ] **CA 1 (BE):** A API .NET serve o frontend e a API a partir de um único processo executável.
 - [ ] **CA 2 (BE):** Acessar URLs de rotas SPA diretamente no navegador (ex.: `/solicitacoes/2`) responde 200 servindo o `index.html`.
 - [ ] **CA 3 (BE):** Acessar rotas `/api/...` inexistentes responde com status HTTP 404 estrito (sem retornar o documento HTML).
 - [ ] **CA 4 (BE):** Os cabeçalhos de resposta HTTP contêm `Cache-Control: no-cache` para o `index.html` e `Cache-Control: public, max-age=31536000, immutable` para arquivos estáticos em `/assets/`.

@@ -5,7 +5,7 @@
 ## História de Usuário
 
 **Como** desenvolvedor frontend consumindo uma API em evolução,  
-**quero** que a listagem do painel seja carregada diretamente da Minimal API .NET com tipagem estrita gerada a partir do documento OpenAPI,  
+**quero** que a listagem do painel seja carregada diretamente da API .NET com tipagem estrita gerada a partir do documento OpenAPI,  
 **para** eliminar dados mockados do cliente e garantir que alterações contratuais no backend quebrem a compilação do TypeScript de forma previsível antes de subirem para produção.
 
 ---
@@ -49,16 +49,16 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Endpoints e Contrato OpenAPI Consolidado
-- Configurar em `api/Program.cs`:
-  - `JsonNumberHandling.Strict` e serialização de enums em snake_case com `JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)`.
-  - CORS habilitado para `http://localhost:5173`.
-  - `AddOpenApi()` + `MapOpenApi()` com `TypedResults` cobrindo 200, 201, 400, 404 e 409.
-- Consolidar as 4 rotas do domínio:
+- Configurar na API (`api/`):
+  - Serialização JSON: `JsonNumberHandling.Strict`, propriedades em camelCase e serialização de enums em snake_case com `JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)`.
+  - CORS habilitado para a origem `http://localhost:5173`.
+  - Especificação OpenAPI ativa (documento `/openapi/v1.json` exposto com schemas tipados para 200, 201, 400, 404 e 409).
+- Consolidar as 4 rotas do domínio (via Controllers ou Minimal APIs à sua escolha):
   - `GET /solicitacoes?status=&busca=`
   - `GET /solicitacoes/{id}`
   - `POST /solicitacoes`
   - `PATCH /solicitacoes/{id}/status`
-- Inicializar a lista em memória com 40 registros (os 6 itens base, idênticos ao mock do front, mais 34 gerados).
+- Inicializar a coleção de solicitações com 40 registros (os 6 itens base, idênticos ao mock do front, mais 34 gerados).
 - No mesmo dia o front passa a consumir a API real e a tipar o cliente com o OpenAPI gerado.
 
 ### Frontend (`web/`) — Geração de Tipos e Consumo HTTP

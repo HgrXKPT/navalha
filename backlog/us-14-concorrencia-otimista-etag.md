@@ -48,7 +48,7 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Versão e Cabeçalhos Condicionais HTTP
-- Em `api/Program.cs`:
+- Na API (`api/`):
   - Adicionar um controle de versão atômico para cada `Solicitacao` (propriedade interna `Versao: int`, incrementada a cada modificação).
   - No endpoint `GET /solicitacoes/{id}`: emitir o cabeçalho de resposta `ETag: "\"{solicitacao.Versao}\""`.
   - No endpoint `PATCH /solicitacoes/{id}/status`:

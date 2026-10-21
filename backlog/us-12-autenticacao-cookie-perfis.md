@@ -50,15 +50,15 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Autenticação Cookie e Políticas de Autorização
-- Em `api/Program.cs`, configurar:
-  - `builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.Cookie.HttpOnly = true; options.Cookie.SameSite = SameSiteMode.Lax; options.ExpireTimeSpan = TimeSpan.FromMinutes(30); })`.
-  - Mapear endpoints:
+- Na API (`api/`), configurar:
+  - Autenticação baseada em Cookie (`CookieAuthenticationDefaults.AuthenticationScheme`) com opções: `HttpOnly = true`, `SameSite = SameSiteMode.Lax` e expiração de 30 minutos.
+  - Endpoints de autenticação (via Controllers ou Minimal APIs):
     - `POST /login`: recebe `LoginRequest(usuario)`. Usuários de teste: `ana` (claim perfil = `"atendente"`) e `carlos` (claim perfil = `"supervisor"`). Realiza `HttpContext.SignInAsync()`.
     - `POST /logout`: limpa sessão com `HttpContext.SignOutAsync()`.
-    - `GET /me`: protegido por `RequireAuthorization()`, retorna `UsuarioResponse(Nome, Perfil)`.
-  - Aplicar `RequireAuthorization()` nos endpoints `/solicitacoes`.
-  - Exigir perfil de `supervisor` para transicionar o status de uma solicitação para `recusada` (retornar `Results.Forbid()` / 403 se for atendente).
-  - Garantir que a API retorne **401/403** (e nunca redirecionamento HTML 302).
+    - `GET /me`: protegido por autorização, retorna status 200 com `UsuarioResponse(Nome, Perfil)`.
+  - Proteger os endpoints de solicitações exigindo autenticação.
+  - Exigir perfil de `supervisor` para transicionar o status de uma solicitação para `recusada` (retornar status `403 Forbidden` se for atendente).
+  - Garantir que a API retorne **status HTTP 401/403** em caso de falha de autenticação/autorização (e nunca redirecionamento HTML 302).
 - No mesmo dia o front faz login e monta o RBAC; o proxy de desenvolvimento repassa `/api` para a API **removendo** o prefixo, porque a API ainda responde nas rotas da raiz.
 
 ### Frontend (`web/`) — Proxy, Tela de Login e RBAC

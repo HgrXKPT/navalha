@@ -46,12 +46,12 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Endpoint POST e Regras de Negócio
-- Em `api/Program.cs`, implementar o endpoint `POST /solicitacoes` recebendo `CriarSolicitacaoRequest`.
+- Na API (`api/`, via Controller ou Minimal API à sua escolha), implementar o endpoint `POST /solicitacoes` recebendo `CriarSolicitacaoRequest`.
 - **Validações de Formato (HTTP 400):**
-  - Retornar `Results.ValidationProblem(errors)` caso `cliente` tenha menos de 3 ou mais de 100 caracteres, ou se `valor <= 0` ou `valor > 10000`.
+  - Retornar status 400 (`ValidationProblemDetails`) caso `cliente` tenha menos de 3 ou mais de 100 caracteres, ou se `valor <= 0` ou `valor > 10000`.
 - **Regras de Negócio (HTTP 409):**
-  - Retornar `Results.Problem(detail: "Cliente já possui uma solicitação aberta.", statusCode: 409)` se já existir chamado com status `Aberta` para o mesmo cliente.
-- Ao salvar com sucesso, persistir na lista em memória e retornar `Results.Created($"/solicitacoes/{nova.Id}", nova)`.
+  - Retornar status 409 (`ProblemDetails` com detail `"Cliente já possui uma solicitação aberta."`) se já existir chamado com status `Aberta` para o mesmo cliente.
+- Ao salvar com sucesso, persistir o chamado e retornar status `201 Created` com cabeçalho `Location: /solicitacoes/{id}` e a entidade criada no corpo.
 - No mesmo dia o front envia o formulário (react-hook-form + zod) para a API real.
 
 ### Frontend (`web/`) — Formulário com React Hook Form e Zod

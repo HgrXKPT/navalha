@@ -44,8 +44,8 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Suporte e Tolerância a Parâmetros Inválidos
-- Em `api/Program.cs`, garantir que o endpoint `GET /solicitacoes/{id:int}` retorne `Results.NotFound()` quando o id não for encontrado.
-- Tratar parâmetros de query inválidos em `GET /solicitacoes` (ex.: `pagina=0` ou valores não numéricos) caindo com segurança para a primeira página sem disparar 500.
+- Na API (`api/`), garantir que o endpoint `GET /solicitacoes/{id:int}` retorne status `404 Not Found` quando o id não for encontrado.
+- Tratar parâmetros de query inválidos em `GET /solicitacoes` (ex.: `pagina=0` ou valores não numéricos) caindo com segurança para a primeira página sem disparar erro 500.
 - O front do dia 08 adota o React Router: a rota da listagem lê os parâmetros da URL e repete a consulta à API.
 
 ### Frontend (`web/`) — Roteamento com React Router

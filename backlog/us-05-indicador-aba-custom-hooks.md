@@ -45,7 +45,7 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Suporte a Filtro por Termo de Busca
-- Em `api/Program.cs`, enriquecer o endpoint `GET /solicitacoes` para aceitar parâmetros de query: `status` e `busca`.
+- Na API (`api/`), enriquecer o endpoint `GET /solicitacoes` para aceitar parâmetros de query: `status` e `busca`.
 - Filtrar os itens verificando se `string.IsNullOrWhiteSpace(busca)` ou se o nome do cliente contém o termo digitado (case-insensitive).
 - O front do dia 05 segue no mock local: o filtro e a busca do indicador rodam sobre a lista que já está no estado do React.
 

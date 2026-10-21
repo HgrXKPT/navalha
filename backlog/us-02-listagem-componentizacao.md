@@ -45,7 +45,7 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Listagem Inicial (já na baseline)
-- Em `api/Program.cs`, a listagem em memória com os 6 registros e o endpoint `GET /solicitacoes` (devolvendo `Results.Ok(lista)`) já existem na baseline, usando os tipos de `api/Contratos/SolicitacaoContratos.cs`.
+- Na API (`api/`), a listagem com os 6 registros base e o endpoint `GET /solicitacoes` (devolvendo status 200 com a coleção de solicitações) já existem na baseline, usando os tipos de `api/Contratos/SolicitacaoContratos.cs`.
 - O endpoint fica visível na documentação `/openapi/v1.json` (mapeada apenas em Development).
 - O front do dia 02 ainda trabalha com o mock local (`web/src/dados/solicitacoes-mock.ts`); a chamada real só entra no dia 06.
 

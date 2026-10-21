@@ -56,8 +56,8 @@
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Compressão e Auditoria de Payloads
-- Em `api/Program.cs`, habilitar compressão de resposta HTTP nativa do ASP.NET Core (`builder.Services.AddResponseCompression()` e `app.UseResponseCompression()`).
-- Inspecionar na aba Network os cabeçalhos `Content-Encoding: gzip` ou `br` emitidos pela Minimal API.
+- Na API (`api/`), habilitar compressão de resposta HTTP nativa do ASP.NET Core (`builder.Services.AddResponseCompression()` e `app.UseResponseCompression()`).
+- Inspecionar na aba Network os cabeçalhos `Content-Encoding: gzip` ou `br` emitidos pela API .NET.
 - O mesmo dia o front atua no bundle (divisão de código) e a medição de payload usa a resposta comprimida da API.
 
 ### Frontend (`web/`) — Code Splitting e Diagnóstico com Profiler
@@ -77,7 +77,7 @@
 
 ## Critérios de Aceite (CA)
 
-- [ ] **CA 1 (BE):** A Minimal API serve payloads JSON comprimidos com gzip/brotli quando solicitado pelo cliente.
+- [ ] **CA 1 (BE):** A API .NET serve payloads JSON comprimidos com gzip/brotli quando solicitado pelo cliente.
 - [ ] **CA 2 (FE):** O bundle inicial da aplicação no `npm run build` foi reduzido através de code splitting com `lazy` e `Suspense`.
 - [ ] **CA 3 (FE):** Ao acessar a rota `/solicitacoes`, o navegador não transfere os arquivos de script da rota `/solicitacoes/nova`.
 - [ ] **CA 4 (FE):** A navegação entre rotas assíncronas exibe um fallback de carregamento suave sem congelar a interface.

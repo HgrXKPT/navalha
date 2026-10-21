@@ -24,7 +24,7 @@ Legenda: ⬜ não iniciado · 🟦 em andamento · 🟨 feito com pendência · 
 | 16 | [US-16: Hospedagem unificada e cache](backlog/us-16-hospedagem-unificada-cache.md) · ADR | ⬜ | | | |
 | 17 | [US-17: Consolidação e mapa de decisões](backlog/us-17-consolidacao-mapa-decisoes.md) | ⬜ | | | |
 
-> **Rebase do back (2026-10-21):** a API do curso foi rebaixada para a baseline do dia 2 — Minimal API de arquivo único em `api/` (`Program.cs` + `Contratos/`). A partir do dia 3, cada dia traz trabalho **novo** de back junto com o front.
+> **Rebase do back (2026-10-21):** a API do curso parte da baseline do dia 2 em `api/` (`Contratos/` e listagem inicial). A arquitetura do backend (Controllers, Minimal APIs modulares, Clean Architecture etc.) fica a critério do aluno, desde que obedeça aos contratos OpenAPI e protocolos HTTP de cada User Story. A partir do dia 3, cada dia traz trabalho **novo** de back junto com o front.
 
 ## Pendências
 

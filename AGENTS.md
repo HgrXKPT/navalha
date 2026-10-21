@@ -36,7 +36,7 @@ Exceções, em que a IA pode gerar código:
 
 - React 19+ com componentes funcionais e hooks, Vite, TypeScript strict e npm. O lint do template Vite é o **oxlint** (`npm run lint`).
 - Dados do servidor: TanStack Query v5. Rotas: React Router (pacote `react-router`). Formulários: react-hook-form + zod. Testes: Vitest + React Testing Library. Tempo real: `@microsoft/signalr`.
-- Backend: .NET 10 / C# moderno com Controllers (`ControllerBase`), OpenAPI (`AddOpenApi`/`MapOpenApi`), JSON snake_case e tipagem estrita.
+- Backend: .NET 10 / C# moderno com arquitetura à escolha do aluno (Controllers, Minimal APIs modulares ou Clean Architecture), OpenAPI (`AddOpenApi`/`MapOpenApi`), JSON camelCase para propriedades, snake_case para enums e tipagem estrita.
 - **Nunca** sugira `create-react-app`, class components, `componentDidMount`, `ReactDOM.render`, `react-router-dom` nem `any` para calar erro.
 - Única exceção a class component: Error Boundary, que o React ainda só oferece como classe. Use a lib `react-error-boundary` em vez de escrever a classe.
 - `useEffect` serve para sincronizar com sistemas externos. Não serve para derivar estado nem para reagir a evento.

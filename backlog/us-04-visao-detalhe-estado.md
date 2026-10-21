@@ -53,8 +53,8 @@ Matriz de 4 perguntas para classificar o estado:
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Endpoint de Detalhe da Solicitação
-- Em `api/Program.cs`, mapear `GET /solicitacoes/{id:int}` utilizando `TypedResults`.
-- Buscar o registro na lista em memória: se encontrado, retornar `TypedResults.Ok(solicitacao)`; caso contrário, retornar `TypedResults.NotFound()`.
+- Na API (`api/`, via Controller ou Minimal API à sua escolha), implementar o endpoint `GET /solicitacoes/{id:int}`.
+- Buscar o registro pelo id: se encontrado, retornar status `200 OK` com a solicitação; caso contrário, retornar status `404 Not Found`.
 - O front do dia 04 segue no mock local: a tela de detalhe é montada a partir dos dados que já estão carregados em memória.
 
 ### Frontend (`web/`) — Elevação de Estado e Componente de Detalhe

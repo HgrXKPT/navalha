@@ -52,9 +52,9 @@ Se responder "sim" a qualquer uma, **não é estado**.
 ## Especificação de Entrega (Backlog Técnico)
 
 ### Backend (`api/`) — Endpoint de Transição de Status
-- Em `api/Program.cs`, implementar o endpoint `PATCH /solicitacoes/{id}/status` recebendo `AlterarStatusRequest`.
-- Validar se a solicitação existe (retornar `Results.NotFound()` caso contrário).
-- Permitir a transição do status `Aberta` para `Concluida`, atualizando a coleção em memória e retornando `Results.Ok(solicitacaoAtualizada)`.
+- Na API (`api/`, via Controller ou Minimal API à sua escolha), implementar o endpoint `PATCH /solicitacoes/{id}/status` recebendo `AlterarStatusRequest`.
+- Validar se a solicitação existe: retornar status `404 Not Found` caso o id não exista.
+- Permitir a transição do status `Aberta` para `Concluida`, atualizando o registro e retornando status `200 OK` com a solicitação atualizada.
 - No mesmo dia o front continua no mock local: a conclusão é simulada no estado do React com `.map()`, sem chamar a API.
 
 ### Frontend (`web/`) — Reatividade, Filtros e Conclusão sem Mutação
