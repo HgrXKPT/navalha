@@ -24,6 +24,8 @@ Legenda: ⬜ não iniciado · 🟦 em andamento · 🟨 feito com pendência · 
 | 16 | [US-16: Hospedagem unificada e cache](backlog/us-16-hospedagem-unificada-cache.md) · ADR | ⬜ | | | |
 | 17 | [US-17: Consolidação e mapa de decisões](backlog/us-17-consolidacao-mapa-decisoes.md) | ⬜ | | | |
 
+> **Rebase do back (2026-10-21):** a API do curso foi rebaixada para a baseline do dia 2 — Minimal API de arquivo único em `api/` (`Program.cs` + `Contratos/`). A partir do dia 3, cada dia traz trabalho **novo** de back junto com o front.
+
 ## Pendências
 
 <!-- Cada item do "Pronto quando" que não bateu. Formato: - [ ] Dia NN: o que faltou -->
@@ -32,6 +34,7 @@ Legenda: ⬜ não iniciado · 🟦 em andamento · 🟨 feito com pendência · 
 - [ ] Dia 01: explicar por que a kata 7 mantém a referência dos itens que não mudaram, e por que o React se importa com isso
 - [x] Dia 02: formatar o valor monetário com `Intl.NumberFormat` em `ItemSolicitacao`
 - [x] Dia 02: limpar os dois itens mockados avulsos renderizados no topo de `App.tsx`
+- [ ] Dia 03: PATCH /solicitacoes/{id}/status em api/Program.cs + filtro/totalizadores/Concluir no front
 
 ## Conceitos que errei
 
