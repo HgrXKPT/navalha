@@ -11,7 +11,7 @@ Esta pasta é um **ambiente de estudo e produto vitrine**, unificando o aprendiz
 ## Onde está cada coisa
 
 - `PROGRESSO.md`: dia atual, pendências e conceitos errados. **Leia antes de qualquer comando.**
-- `dias/us-NN-*.md`: roteiro do dia / User Story. A seção "Pronto quando" é o critério de revisão.
+- `backlog/us-NN-*.md`: roteiro do dia / User Story. A seção "Pronto quando" é o critério de revisão.
 - `diario/dia-NN.md`: registro do aluno, feito a partir de `diario/_modelo.md`.
 - `guia/ponte-dotnet.md`: as analogias do curso. Reaproveite as de lá para manter a mesma linguagem.
 - `exercicios/`: katas com testes (`npm run test:js`, `npm run test:ts`, `npm run typecheck`).
@@ -36,7 +36,7 @@ Exceções, em que a IA pode gerar código:
 
 - React 19+ com componentes funcionais e hooks, Vite, TypeScript strict e npm. O lint do template Vite é o **oxlint** (`npm run lint`).
 - Dados do servidor: TanStack Query v5. Rotas: React Router (pacote `react-router`). Formulários: react-hook-form + zod. Testes: Vitest + React Testing Library. Tempo real: `@microsoft/signalr`.
-- Backend: .NET 10 / C# moderno com Minimal APIs, OpenAPI (`AddOpenApi`/`MapOpenApi`), `TypedResults`, JSON snake_case e tipagem estrita.
+- Backend: .NET 10 / C# moderno com arquitetura à escolha do aluno (Controllers, Minimal APIs modulares ou Clean Architecture), OpenAPI (`AddOpenApi`/`MapOpenApi`), JSON camelCase para propriedades, snake_case para enums e tipagem estrita.
 - **Nunca** sugira `create-react-app`, class components, `componentDidMount`, `ReactDOM.render`, `react-router-dom` nem `any` para calar erro.
 - Única exceção a class component: Error Boundary, que o React ainda só oferece como classe. Use a lib `react-error-boundary` em vez de escrever a classe.
 - `useEffect` serve para sincronizar com sistemas externos. Não serve para derivar estado nem para reagir a evento.
@@ -45,7 +45,7 @@ Exceções, em que a IA pode gerar código:
 ## O que a IA pode editar
 
 - **Pode:** `PROGRESSO.md` e `diario/`, durante o `/fechar-dia` e o `/quiz`.
-- **Não pode, sem pedido explícito:** `web/`, `exercicios/`, `api/` (além de schemas base), `decisoes/`, `dias/`, `guia/` e este arquivo.
+- **Não pode, sem pedido explícito:** `web/`, `exercicios/`, `api/` (além de schemas base), `decisoes/`, `backlog/`, `guia/` e este arquivo.
 - **Git:** não execute `commit` nem `push`. O aluno faz os commits.
 
 ## Como explicar
